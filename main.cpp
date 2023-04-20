@@ -1,14 +1,14 @@
 #include <curses.h>
 #include <iostream>
 #include <ctype.h>
-#include <fstream>
 #include <string>
-#include <cstdlib>
+//files
 #include <iostream>
 #include <fstream>
+//STL requirements
+#include<array> // for array, at(), and for STL requirement, used in tic tac board character array
+#include<iterator> // for iterators
 using namespace std;
-
-//gbd g++ -g
 
 //declaring classes here so they can be used in classes prior to actual declaration
 class TicTacBoard;
@@ -59,21 +59,22 @@ public:
 
 //note: not a subclass of GameBoard like planned. Ncurses threw a "Segmentation Fault" during runtime
 //removing the parent class fixed this.
+//this was changed to implement the STL requirement (array), due to time some methods were switched to iterators and others were left with standard c++ syntax.
+//example of iterator can be found in the constructor of tictacboard
 class TicTacBoard{
 private:
-    char avaiableSquares[9];
+    array <char,9> avaiableSquares;
 public:
     TicTacBoard() {
-        avaiableSquares[0] = '1';
-        avaiableSquares[1] = '2';
-        avaiableSquares[2] = '3';
-        avaiableSquares[3] = '4';
-        avaiableSquares[4] = '5';
-        avaiableSquares[5] = '6';
-        avaiableSquares[6] = '7';
-        avaiableSquares[7] = '8';
-        avaiableSquares[8] = '9';
+        array<char,9>::iterator ptr;
+        char value = '1';
+        
+        for(ptr = avaiableSquares.begin(); ptr <avaiableSquares.end();ptr++){
+            *ptr = value;
+            value++;
+        }
     }
+    
     char getElement(int index){
         return avaiableSquares[index];
     }
@@ -110,7 +111,7 @@ public:
     }
     
     //****************************
-    //for testing purposes shoudl be removed upon logic completion
+    //for testing purposes should be removed upon logic completion
     //******************************
     void fill(){
         for (int i = 0; i < 9; i++) {
@@ -125,8 +126,14 @@ public:
 //these function are delcared here so the TicTacBoard class can be used inside them.
 //if these are in the traditional spot the TicTacBoard class hasn't been defined yet and an error is thrown
 GameBoard :: GameBoard() {
+    //array<TicTacBoard,9>::iterator ptr;
+  //  ptr = entireGame.begin();
+    
     for (int i = 0; i < 9; i++) {
         entireGame[i] = new TicTacBoard();
+        //****************************
+        //for testing purposes should be removed upon logic completion
+        //******************************
         entireGame[i]->fill();
         
     }
@@ -169,8 +176,9 @@ void GameBoard :: setElementInOneSquare(int boardIndex, int squareindex,char new
 TicTacBoard GameBoard :: getOneTicTacBoard(int index){
     return *entireGame[index];
 }
+
 /*
-//this overloads the '=' operator. Made for the load function
+//this overloads the '=' operator. Made for the load function (potentially)
 GameBoard& GameBoard::operator=(const GameBoard& other) {
     //see if they already equal each other
     if (this != &other) {
@@ -187,6 +195,8 @@ GameBoard& GameBoard::operator=(const GameBoard& other) {
     return *this;
 }
 */
+
+//logic for the game
 class logic{
 private:
     GameBoard game;
@@ -227,7 +237,7 @@ public:
          */
         
         move(15, 0);
-        printw("(1-9)This would be were the available squares are displayed for selection\n(S/s)). Save Game\n(Q/q). Quit Game\nYour Input: \n");
+        printw("(1-9)This would be were the available squares are displayed for selection\n(S/s). Save Game\n(Q/q). Quit Game\nYour Input: \n");
         input = getch();
         
         input = toupper(input);
@@ -252,8 +262,8 @@ public:
         return input;
     }
     
-    //method that save a game to a file
-    //************************************************************************************************************************************
+    
+    //method that saves a game to a file
     void saveGame(GameBoard& game){
         //code taken/inspired from code for geeks link in announcement on canvas.
         // Object to write in file
@@ -268,6 +278,7 @@ public:
         file_obj << game.getTurn();
         
         TicTacBoard toChange;
+        
         //save the array values
         for(int outer = 0;outer<9;outer++){
             toChange = game.getOneTicTacBoard(outer);
@@ -282,48 +293,62 @@ public:
     }
     
     
-    void loadGame(GameBoard& game){
+    //method that loads a game. If no game is found it will either error out and start a new game or just load a blank game.
+    bool loadGame(GameBoard& game){
         //code taken/inspired from code for geeks link in announcement on canvas.
         // Object to read from file
         ifstream file_obj;
         
-        // Opening file in input mode
-        file_obj.open("saveFile.txt", ios::in);
-        
-        //online resources were used for a effient way to convert chars to integers
-        //variables
-        
-        char input;
-        int intToChange;
-        
-        //board number
-        file_obj >> input;
-        intToChange = input - '0'; //this line could be moved into the method call but clarity ya know
-        game.setCurrentBoard(intToChange);
-        
-        //board winner
-        file_obj >> input;
-        intToChange = input - '0'; //this line could be moved into the method call but clarity ya know
-        game.setBoardWinner(intToChange);
-        
-        //current turn
-        file_obj >> input;
-        intToChange = input - '0'; //this line could be moved into the method call but clarity ya know
-        game.setTurn(intToChange);
-        
-        //now for the arrays
-        for(int outer = 0;outer<9;outer++){
-            for(int inner = 0;inner<9;inner++){
+        try{ //for try catch requirement.
+            // Opening file in input mode
+            file_obj.open("saveFile.txt", ios::in);
+            
+            if(!file_obj.is_open()){
+                throw (0);
+            }
+            else{
+                //online resources were used for a effient way to convert chars to integers
+                //variables
+                
+                char input;
+                int intToChange;
+                
+                //board number
                 file_obj >> input;
-                game.setElementInOneSquare(outer, inner, input);
+                intToChange = input - '0'; //this line could be moved into the method call but clarity ya know
+                game.setCurrentBoard(intToChange);
+                
+                //board winner
+                file_obj >> input;
+                intToChange = input - '0'; //this line could be moved into the method call but clarity ya know
+                game.setBoardWinner(intToChange);
+                
+                //current turn
+                file_obj >> input;
+                intToChange = input - '0'; //this line could be moved into the method call but clarity ya know
+                game.setTurn(intToChange);
+                
+                //now for the arrays
+                for(int outer = 0;outer<9;outer++){
+                    for(int inner = 0;inner<9;inner++){
+                        file_obj >> input;
+                        game.setElementInOneSquare(outer, inner, input);
+                    }
+                }
+                
+                file_obj.close();
+                return true;
             }
         }
-        
-        file_obj.close();
-        
-        return;
+        catch(int error){
+            printw("A save file could not be found please choose another option. Press any key to continue");
+            getch();
+            clear();
+            refresh();
+            return false;
+        }
     }
-    //************************************************************************************************************************************
+    
     int menuGameOpened(){
         bool verified = false;
         //loop until valid choice
@@ -345,10 +370,13 @@ public:
                     return 2;
                     break;
                 case '3':
-                    verified = true;
-                    loadGame(game);
+                    
+                    if(loadGame(game)){
+                        verified = true;
+                        clear();
+                        return 3;
+                    }
                     clear();
-                    return 3;
                     break;
                 default:
                     printw("Input not regonized. Please enter 1 or 2.\nEnter any key to continue.");
