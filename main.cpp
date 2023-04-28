@@ -64,6 +64,7 @@ public:
 class TicTacBoard{
 private:
     array <char,9> avaiableSquares;
+    char winner;
 public:
     TicTacBoard() {
         array<char,9>::iterator ptr;
@@ -108,6 +109,73 @@ public:
         }
         printw(" ------- ");
         refresh();
+    }
+
+    bool checkWin() 
+    {
+        bool completed;
+
+        int index = 0; 
+        int maxCompares = 3;
+        int compares = 0;
+
+        //horizontals
+        while (!gameOver && compares < maxCompares) {
+            //notice that string compare was not used. Because we're comparing 2 chars == is fine.
+            if (avaiableSquares[index] == avaiableSquares[index + 1] && avaiableSquares[index] == avaiableSquares[index + 2]) {
+                completed = true;
+                if (avaiableSquares[index] == 'x') {
+                    winner = 'x';
+                }
+                else {
+                    winner = 'o';
+                }
+            }
+            //next row
+            //could be used with a larger board via a loop for length of board and index+=siseOfBoard
+            index += 3;
+            compares++;
+        }//end horizontal check
+
+        //verticals
+        index = 0;
+        maxCompares = 3;
+        compares = 0;
+        while (!gameOver && compares < maxCompares) {
+            if (avaiableSquares[index] == avaiableSquares[index + 3] && avaiableSquares[index] == avaiableSquares[index + 6]) {
+                completed = true;
+                if (avaiableSquares[index] == 'x') {
+                    winner = 'x';
+                }
+                else {
+                    winner = 'o';
+                }
+            }
+            //next column
+            index += 1;
+            compares++;
+        }//end vertical check
+
+        //diagonals are not related so 2 if statements will do.
+        //could be used in a larger board with [0],[counter*(sizeOfBoard+1)]
+        if (avaiableSquares[0] == avaiableSquares[4] && avaiableSquares[0] == avaiableSquares[8]) {
+            completed = true;
+            if (avaiableSquares[0] == 'x') {
+                winner = 'x';
+            }
+            else {
+                winner = 'o';
+            }
+        }
+        if (avaiableSquares[2] == avaiableSquares[4] && avaiableSquares[0] == avaiableSquares[6]) {
+            completed = true;
+            if (avaiableSquares[2] == 'x') {
+                winner = 'x';
+            }
+            else {
+                winner = 'o';
+            }
+        }
     }
     
     //****************************
@@ -232,18 +300,150 @@ public:
         char input;
         /*
          *********************************************************************************
-         This space is reservd for displaying the approiate numbers for a square selection. For now it will just display load or quit
+         This space is reserved for displaying the approiate numbers for a square selection. For now it will just display load or quit
          *********************************************************************************
          */
         
         move(15, 0);
-        printw("(1-9)This would be were the available squares are displayed for selection\n(S/s). Save Game\n(Q/q). Quit Game\nYour Input: \n");
+        printw("Choose Save(S/s), Quit(Q/q), or one of the following squares(1-9): ");
+        for (int i = 0; i < 9; i++)
+        {
+            if (game.getOneTicTacBoard(i).checkWin() == false)
+            {
+                printw(i + " ");
+            }
+        }
         input = getch();
         
         input = toupper(input);
         
         switch(input){
-                //cases for square selection should be before this code
+            case '1':
+                if (game.getOneTicTacBoard(1).checkWin())
+                {
+                    printw("This square has already been won!");
+                    getch();
+                    clear();
+                    break;
+                }
+                else
+                {
+                    printw("Square 1 selected!");
+                    game.setCurrentBoard(1);
+                    break;
+                }
+            case '2':
+                if (game.getOneTicTacBoard(2).checkWin())
+                {
+                    printw("This square has already been won!");
+                    getch();
+                    clear();
+                    break;
+                }
+                else
+                {
+                    printw("Square 2 selected!");
+                    game.setCurrentBoard(2);
+                    break;
+                }
+            case '3':
+                if (game.getOneTicTacBoard(3).checkWin())
+                {
+                    printw("This square has already been won!");
+                    getch();
+                    clear();
+                    break;
+                }
+                else
+                {
+                    printw("Square 3 selected!");
+                    game.setCurrentBoard(3);
+                    break;
+                }
+            case '4':
+                if (game.getOneTicTacBoard(4).checkWin())
+                {
+                    printw("This square has already been won!");
+                    getch();
+                    clear();
+                    break;
+                }
+                else
+                {
+                    printw("Square 4 selected!");
+                    game.setCurrentBoard(4);
+                    break;
+                }
+            case '5':
+                if (game.getOneTicTacBoard(5).checkWin())
+                {
+                    printw("This square has already been won!");
+                    getch();
+                    clear();
+                    break;
+                }
+                else
+                {
+                    printw("Square 5 selected!");
+                    game.setCurrentBoard(5);
+                    break;
+                }
+            case '6':
+                if (game.getOneTicTacBoard(6).checkWin())
+                {
+                    printw("This square has already been won!");
+                    getch();
+                    clear();
+                    break;
+                }
+                else
+                {
+                    printw("Square 6 selected!");
+                    game.setCurrentBoard(6);
+                    break;
+                }
+            case '7':
+                if (game.getOneTicTacBoard(7).checkWin())
+                {
+                    printw("This square has already been won!");
+                    getch();
+                    clear();
+                    break;
+                }
+                else
+                {
+                    printw("Square 7 selected!");
+                    game.setCurrentBoard(7);
+                    break;
+                }
+            case '8':
+                if (game.getOneTicTacBoard(8).checkWin())
+                {
+                    printw("This square has already been won!");
+                    getch();
+                    clear();
+                    break;
+                }
+                else
+                {
+                    printw("Square 8 selected!");
+                    game.setCurrentBoard(8);
+                    break;
+                }
+            case '9':
+                if (game.getOneTicTacBoard(9).checkWin())
+                {
+                    printw("This square has already been won!");
+                    getch();
+                    clear();
+                    break;
+                }
+                else
+                {
+                    printw("Square 9 selected!");
+                    game.setCurrentBoard(9);
+                    break;
+                }
             case 'S':
                 printw("S was entered");
                 saveGame(game);
