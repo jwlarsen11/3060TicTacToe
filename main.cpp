@@ -111,11 +111,12 @@ public:
         refresh();
     }
 
-    bool checkWin() 
+    bool checkWin()
     {
-        bool completed;
+        bool completed = false;
+        bool gameOver = false;
 
-        int index = 0; 
+        int index = 0;
         int maxCompares = 3;
         int compares = 0;
 
@@ -176,6 +177,7 @@ public:
                 winner = 'o';
             }
         }
+        return completed;
     }
     
     //****************************
@@ -305,21 +307,23 @@ public:
          */
         
         move(15, 0);
-        printw("Choose Save(S/s), Quit(Q/q), or one of the following squares(1-9): ");
+        printw("Choose Save(S/s)\nQuit(Q/q)\nOr one of the following squares(1-9): ");
         for (int i = 0; i < 9; i++)
         {
             if (game.getOneTicTacBoard(i).checkWin() == false)
             {
-                printw(i + " ");
+                printw("%d ",i+1);
+                
             }
         }
+        printw("\n");
         input = getch();
         
         input = toupper(input);
         
         switch(input){
             case '1':
-                if (game.getOneTicTacBoard(1).checkWin())
+                if (game.getOneTicTacBoard(0).checkWin())
                 {
                     printw("This square has already been won!");
                     getch();
@@ -329,11 +333,11 @@ public:
                 else
                 {
                     printw("Square 1 selected!");
-                    game.setCurrentBoard(1);
+                    game.setCurrentBoard(0);
                     break;
                 }
             case '2':
-                if (game.getOneTicTacBoard(2).checkWin())
+                if (game.getOneTicTacBoard(1).checkWin())
                 {
                     printw("This square has already been won!");
                     getch();
@@ -343,11 +347,11 @@ public:
                 else
                 {
                     printw("Square 2 selected!");
-                    game.setCurrentBoard(2);
+                    game.setCurrentBoard(1);
                     break;
                 }
             case '3':
-                if (game.getOneTicTacBoard(3).checkWin())
+                if (game.getOneTicTacBoard(2).checkWin())
                 {
                     printw("This square has already been won!");
                     getch();
@@ -357,11 +361,11 @@ public:
                 else
                 {
                     printw("Square 3 selected!");
-                    game.setCurrentBoard(3);
+                    game.setCurrentBoard(2);
                     break;
                 }
             case '4':
-                if (game.getOneTicTacBoard(4).checkWin())
+                if (game.getOneTicTacBoard(3).checkWin())
                 {
                     printw("This square has already been won!");
                     getch();
@@ -371,11 +375,11 @@ public:
                 else
                 {
                     printw("Square 4 selected!");
-                    game.setCurrentBoard(4);
+                    game.setCurrentBoard(3);
                     break;
                 }
             case '5':
-                if (game.getOneTicTacBoard(5).checkWin())
+                if (game.getOneTicTacBoard(4).checkWin())
                 {
                     printw("This square has already been won!");
                     getch();
@@ -385,11 +389,11 @@ public:
                 else
                 {
                     printw("Square 5 selected!");
-                    game.setCurrentBoard(5);
+                    game.setCurrentBoard(4);
                     break;
                 }
             case '6':
-                if (game.getOneTicTacBoard(6).checkWin())
+                if (game.getOneTicTacBoard(5).checkWin())
                 {
                     printw("This square has already been won!");
                     getch();
@@ -399,11 +403,11 @@ public:
                 else
                 {
                     printw("Square 6 selected!");
-                    game.setCurrentBoard(6);
+                    game.setCurrentBoard(5);
                     break;
                 }
             case '7':
-                if (game.getOneTicTacBoard(7).checkWin())
+                if (game.getOneTicTacBoard(6).checkWin())
                 {
                     printw("This square has already been won!");
                     getch();
@@ -413,11 +417,11 @@ public:
                 else
                 {
                     printw("Square 7 selected!");
-                    game.setCurrentBoard(7);
+                    game.setCurrentBoard(6);
                     break;
                 }
             case '8':
-                if (game.getOneTicTacBoard(8).checkWin())
+                if (game.getOneTicTacBoard(7).checkWin())
                 {
                     printw("This square has already been won!");
                     getch();
@@ -427,11 +431,11 @@ public:
                 else
                 {
                     printw("Square 8 selected!");
-                    game.setCurrentBoard(8);
+                    game.setCurrentBoard(7);
                     break;
                 }
             case '9':
-                if (game.getOneTicTacBoard(9).checkWin())
+                if (game.getOneTicTacBoard(8).checkWin())
                 {
                     printw("This square has already been won!");
                     getch();
@@ -441,7 +445,7 @@ public:
                 else
                 {
                     printw("Square 9 selected!");
-                    game.setCurrentBoard(9);
+                    game.setCurrentBoard(8);
                     break;
                 }
             case 'S':
