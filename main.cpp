@@ -334,9 +334,9 @@ public:
                     if (game.getOneTicTacBoard(0).getElement(input) != 'x' && game.getOneTicTacBoard(0).getElement(input) != 'o')
                     {
                         if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(0).setElement(input, 'x');
+                            game.getOneTicTacBoard(0).setElement(input-1, 'x');
                         else
-                            game.getOneTicTacBoard(0).setElement(input, 'o');
+                            game.getOneTicTacBoard(0).setElement(input-1, 'o');
                     }
                     else
                     {
@@ -362,9 +362,9 @@ public:
                     if (game.getOneTicTacBoard(1).getElement(input) != 'x' && game.getOneTicTacBoard(1).getElement(input) != 'o')
                     {
                         if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(1).setElement(input, 'x');
+                            game.getOneTicTacBoard(1).setElement(input-1, 'x');
                         else
-                            game.getOneTicTacBoard(1).setElement(input, 'o');
+                            game.getOneTicTacBoard(1).setElement(input-1, 'o');
                     }
                     else
                     {
@@ -390,9 +390,9 @@ public:
                     if (game.getOneTicTacBoard(2).getElement(input) != 'x' && game.getOneTicTacBoard(2).getElement(input) != 'o')
                     {
                         if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(2).setElement(input, 'x');
+                            game.getOneTicTacBoard(2).setElement(input-1, 'x');
                         else
-                            game.getOneTicTacBoard(2).setElement(input, 'o');
+                            game.getOneTicTacBoard(2).setElement(input-1, 'o');
                     }
                     else
                     {
@@ -418,9 +418,9 @@ public:
                     if (game.getOneTicTacBoard(3).getElement(input) != 'x' && game.getOneTicTacBoard(3).getElement(input) != 'o')
                     {
                         if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(3).setElement(input, 'x');
+                            game.getOneTicTacBoard(3).setElement(input-1, 'x')
                         else
-                            game.getOneTicTacBoard(3).setElement(input, 'o');
+                            game.getOneTicTacBoard(3).setElement(input-1, 'o');
                     }
                     else
                     {
@@ -446,9 +446,9 @@ public:
                     if (game.getOneTicTacBoard(4).getElement(input) != 'x' && game.getOneTicTacBoard(4).getElement(input) != 'o')
                     {
                         if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(4).setElement(input, 'x');
+                            game.getOneTicTacBoard(4).setElement(input-1, 'x');
                         else
-                            game.getOneTicTacBoard(4).setElement(input, 'o');
+                            game.getOneTicTacBoard(4).setElement(input-1, 'o');
                     }
                     else
                     {
@@ -473,9 +473,9 @@ public:
                     if (game.getOneTicTacBoard(5).getElement(input) != 'x' && game.getOneTicTacBoard(5).getElement(input) != 'o')
                     {
                         if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(5).setElement(input, 'x');
+                            game.getOneTicTacBoard(5).setElement(input-1, 'x');
                         else
-                            game.getOneTicTacBoard(5).setElement(input, 'o');
+                            game.getOneTicTacBoard(5).setElement(input-1, 'o');
                     }
                     else
                     {
@@ -501,9 +501,9 @@ public:
                     if (game.getOneTicTacBoard(6).getElement(input) != 'x' && game.getOneTicTacBoard(6).getElement(input) != 'o')
                     {
                         if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(6).setElement(input, 'x');
+                            game.getOneTicTacBoard(6).setElement(input-1, 'x');
                         else
-                            game.getOneTicTacBoard(6).setElement(input, 'o');
+                            game.getOneTicTacBoard(6).setElement(input-1, 'o');
                     }
                     else
                     {
@@ -529,9 +529,9 @@ public:
                     if (game.getOneTicTacBoard(7).getElement(input) != 'x' && game.getOneTicTacBoard(7).getElement(input) != 'o')
                     {
                         if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(7).setElement(input, 'x');
+                            game.getOneTicTacBoard(7).setElement(input-1, 'x');
                         else
-                            game.getOneTicTacBoard(7).setElement(input, 'o');
+                            game.getOneTicTacBoard(7).setElement(input-1, 'o');
                     }
                     else
                     {
@@ -557,9 +557,9 @@ public:
                     if (game.getOneTicTacBoard(8).getElement(input) != 'x' && game.getOneTicTacBoard(8).getElement(input) != 'o')
                     {
                         if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(8).setElement(input, 'x');
+                            game.getOneTicTacBoard(8).setElement(input-1, 'x');
                         else
-                            game.getOneTicTacBoard(8).setElement(input, 'o');
+                            game.getOneTicTacBoard(8).setElement(input-1, 'o');
                     }
                     else
                     {
