@@ -19,11 +19,11 @@ private:
     TicTacBoard* entireGame[9];
     int currentBoard;
     int boardWinner;
-    int currentTurn; //player 1 or 2
     
 public:
     //defined later because we need TicTacBoard methods which aren't defined at this point in the program.
     GameBoard();
+    int currentTurn; //player 1 or 2
     void displayGameBoard(int);
     char getElementInOneSquare(TicTacBoard& square, int index);
     void setElementInOneSquare(int boardIndex, int squareindex,char newElement);
@@ -333,10 +333,10 @@ public:
                     input = getch();
                     if (game.getOneTicTacBoard(0).getElement(input) != 'x' && game.getOneTicTacBoard(0).getElement(input) != 'o')
                     {
-                        if (turn == 1)
-                            availableSquares[input] = 'x';
+                        if (game.currentTurn == 1)
+                            game.getOneTicTacBoard(0).setElement(input, 'x');
                         else
-                            availableSquares[input] = 'o';
+                            game.getOneTicTacBoard(0).setElement(input, 'o');
                     }
                     else
                     {
@@ -361,10 +361,10 @@ public:
                     input = getch();
                     if (game.getOneTicTacBoard(1).getElement(input) != 'x' && game.getOneTicTacBoard(1).getElement(input) != 'o')
                     {
-                        if (turn == 1)
-                            availableSquares[input] = 'x';
+                        if (game.currentTurn == 1)
+                            game.getOneTicTacBoard(1).setElement(input, 'x');
                         else
-                            availableSquares[input] = 'o';
+                            game.getOneTicTacBoard(1).setElement(input, 'o');
                     }
                     else
                     {
@@ -389,10 +389,10 @@ public:
                     input = getch();
                     if (game.getOneTicTacBoard(2).getElement(input) != 'x' && game.getOneTicTacBoard(2).getElement(input) != 'o')
                     {
-                        if (turn == 1)
-                            availableSquares[input] = 'x';
+                        if (game.currentTurn == 1)
+                            game.getOneTicTacBoard(2).setElement(input, 'x');
                         else
-                            availableSquares[input] = 'o';
+                            game.getOneTicTacBoard(2).setElement(input, 'o');
                     }
                     else
                     {
@@ -417,10 +417,10 @@ public:
                     input = getch();
                     if (game.getOneTicTacBoard(3).getElement(input) != 'x' && game.getOneTicTacBoard(3).getElement(input) != 'o')
                     {
-                        if (turn == 1)
-                            availableSquares[input] = 'x';
+                        if (game.currentTurn == 1)
+                            game.getOneTicTacBoard(3).setElement(input, 'x');
                         else
-                            availableSquares[input] = 'o';
+                            game.getOneTicTacBoard(3).setElement(input, 'o');
                     }
                     else
                     {
@@ -445,10 +445,10 @@ public:
                     input = getch();
                     if (game.getOneTicTacBoard(4).getElement(input) != 'x' && game.getOneTicTacBoard(4).getElement(input) != 'o')
                     {
-                        if (turn == 1)
-                            availableSquares[input] = 'x';
+                        if (game.currentTurn == 1)
+                            game.getOneTicTacBoard(4).setElement(input, 'x');
                         else
-                            availableSquares[input] = 'o';
+                            game.getOneTicTacBoard(4).setElement(input, 'o');
                     }
                     else
                     {
@@ -472,10 +472,10 @@ public:
                     input = getch();
                     if (game.getOneTicTacBoard(5).getElement(input) != 'x' && game.getOneTicTacBoard(5).getElement(input) != 'o')
                     {
-                        if (turn == 1)
-                            availableSquares[input] = 'x';
+                        if (game.currentTurn == 1)
+                            game.getOneTicTacBoard(5).setElement(input, 'x');
                         else
-                            availableSquares[input] = 'o';
+                            game.getOneTicTacBoard(5).setElement(input, 'o');
                     }
                     else
                     {
@@ -500,10 +500,10 @@ public:
                     input = getch();
                     if (game.getOneTicTacBoard(6).getElement(input) != 'x' && game.getOneTicTacBoard(6).getElement(input) != 'o')
                     {
-                        if (turn == 1)
-                            availableSquares[input] = 'x';
+                        if (game.currentTurn == 1)
+                            game.getOneTicTacBoard(6).setElement(input, 'x');
                         else
-                            availableSquares[input] = 'o';
+                            game.getOneTicTacBoard(6).setElement(input, 'o');
                     }
                     else
                     {
@@ -528,10 +528,10 @@ public:
                     input = getch();
                     if (game.getOneTicTacBoard(7).getElement(input) != 'x' && game.getOneTicTacBoard(7).getElement(input) != 'o')
                     {
-                        if (turn == 1)
-                            availableSquares[input] = 'x';
+                        if (game.currentTurn == 1)
+                            game.getOneTicTacBoard(7).setElement(input, 'x');
                         else
-                            availableSquares[input] = 'o';
+                            game.getOneTicTacBoard(7).setElement(input, 'o');
                     }
                     else
                     {
@@ -556,10 +556,10 @@ public:
                     input = getch();
                     if (game.getOneTicTacBoard(8).getElement(input) != 'x' && game.getOneTicTacBoard(8).getElement(input) != 'o')
                     {
-                        if (turn == 1)
-                            availableSquares[input] = 'x';
+                        if (game.currentTurn == 1)
+                            game.getOneTicTacBoard(8).setElement(input, 'x');
                         else
-                            availableSquares[input] = 'o';
+                            game.getOneTicTacBoard(8).setElement(input, 'o');
                     }
                     else
                     {
