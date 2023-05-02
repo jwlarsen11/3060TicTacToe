@@ -300,11 +300,6 @@ public:
          */
         
         char input;
-        /*
-         *********************************************************************************
-         This space is reserved for displaying the approiate numbers for a square selection. For now it will just display load or quit
-         *********************************************************************************
-         */
         
         move(15, 0);
         printw("Choose Save(S/s)\nQuit(Q/q)\nOr one of the following squares(1-9): ");
@@ -334,6 +329,20 @@ public:
                 {
                     printw("Square 1 selected!");
                     game.setCurrentBoard(0);
+                    printw("Choose another square (1-9)");
+                    input = getch();
+                    if (game.getOneTicTacBoard(0).getElement(input) != 'x' && game.getOneTicTacBoard(0).getElement(input) != 'o')
+                    {
+                        if (turn == 1)
+                            availableSquares[input] = 'x';
+                        else
+                            availableSquares[input] = 'o';
+                    }
+                    else
+                    {
+                        printw("Square is already played!");
+                        menuForPlayingGame(game);
+                    }
                     break;
                 }
             case '2':
@@ -348,6 +357,20 @@ public:
                 {
                     printw("Square 2 selected!");
                     game.setCurrentBoard(1);
+                    printw("Choose another square (1-9)");
+                    input = getch();
+                    if (game.getOneTicTacBoard(1).getElement(input) != 'x' && game.getOneTicTacBoard(1).getElement(input) != 'o')
+                    {
+                        if (turn == 1)
+                            availableSquares[input] = 'x';
+                        else
+                            availableSquares[input] = 'o';
+                    }
+                    else
+                    {
+                        printw("Square is already played!");
+                        menuForPlayingGame(game);
+                    }
                     break;
                 }
             case '3':
@@ -362,6 +385,20 @@ public:
                 {
                     printw("Square 3 selected!");
                     game.setCurrentBoard(2);
+                    printw("Choose another square (1-9)");
+                    input = getch();
+                    if (game.getOneTicTacBoard(2).getElement(input) != 'x' && game.getOneTicTacBoard(2).getElement(input) != 'o')
+                    {
+                        if (turn == 1)
+                            availableSquares[input] = 'x';
+                        else
+                            availableSquares[input] = 'o';
+                    }
+                    else
+                    {
+                        printw("Square is already played!");
+                        menuForPlayingGame(game);
+                    }
                     break;
                 }
             case '4':
@@ -376,6 +413,20 @@ public:
                 {
                     printw("Square 4 selected!");
                     game.setCurrentBoard(3);
+                    printw("Choose another square (1-9)");
+                    input = getch();
+                    if (game.getOneTicTacBoard(3).getElement(input) != 'x' && game.getOneTicTacBoard(3).getElement(input) != 'o')
+                    {
+                        if (turn == 1)
+                            availableSquares[input] = 'x';
+                        else
+                            availableSquares[input] = 'o';
+                    }
+                    else
+                    {
+                        printw("Square is already played!");
+                        menuForPlayingGame(game);
+                    }
                     break;
                 }
             case '5':
@@ -390,6 +441,20 @@ public:
                 {
                     printw("Square 5 selected!");
                     game.setCurrentBoard(4);
+                    printw("Choose another square (1-9)");
+                    input = getch();
+                    if (game.getOneTicTacBoard(4).getElement(input) != 'x' && game.getOneTicTacBoard(4).getElement(input) != 'o')
+                    {
+                        if (turn == 1)
+                            availableSquares[input] = 'x';
+                        else
+                            availableSquares[input] = 'o';
+                    }
+                    else
+                    {
+                        printw("Square is already played!");
+                        menuForPlayingGame(game);
+                    }
                     break;
                 }
             case '6':
@@ -403,7 +468,20 @@ public:
                 else
                 {
                     printw("Square 6 selected!");
-                    game.setCurrentBoard(5);
+                    game.setCurrentBoard(5); printw("Choose another square (1-9)");
+                    input = getch();
+                    if (game.getOneTicTacBoard(5).getElement(input) != 'x' && game.getOneTicTacBoard(5).getElement(input) != 'o')
+                    {
+                        if (turn == 1)
+                            availableSquares[input] = 'x';
+                        else
+                            availableSquares[input] = 'o';
+                    }
+                    else
+                    {
+                        printw("Square is already played!");
+                        menuForPlayingGame(game);
+                    }
                     break;
                 }
             case '7':
@@ -418,6 +496,20 @@ public:
                 {
                     printw("Square 7 selected!");
                     game.setCurrentBoard(6);
+                    printw("Choose another square (1-9)");
+                    input = getch();
+                    if (game.getOneTicTacBoard(6).getElement(input) != 'x' && game.getOneTicTacBoard(6).getElement(input) != 'o')
+                    {
+                        if (turn == 1)
+                            availableSquares[input] = 'x';
+                        else
+                            availableSquares[input] = 'o';
+                    }
+                    else
+                    {
+                        printw("Square is already played!");
+                        menuForPlayingGame(game);
+                    }
                     break;
                 }
             case '8':
@@ -432,6 +524,20 @@ public:
                 {
                     printw("Square 8 selected!");
                     game.setCurrentBoard(7);
+                    printw("Choose another square (1-9)");
+                    input = getch();
+                    if (game.getOneTicTacBoard(7).getElement(input) != 'x' && game.getOneTicTacBoard(7).getElement(input) != 'o')
+                    {
+                        if (turn == 1)
+                            availableSquares[input] = 'x';
+                        else
+                            availableSquares[input] = 'o';
+                    }
+                    else
+                    {
+                        printw("Square is already played!");
+                        menuForPlayingGame(game);
+                    }
                     break;
                 }
             case '9':
@@ -446,6 +552,20 @@ public:
                 {
                     printw("Square 9 selected!");
                     game.setCurrentBoard(8);
+                    printw("Choose another square (1-9)");
+                    input = getch();
+                    if (game.getOneTicTacBoard(8).getElement(input) != 'x' && game.getOneTicTacBoard(8).getElement(input) != 'o')
+                    {
+                        if (turn == 1)
+                            availableSquares[input] = 'x';
+                        else
+                            availableSquares[input] = 'o';
+                    }
+                    else
+                    {
+                        printw("Square is already played!");
+                        menuForPlayingGame(game);
+                    }
                     break;
                 }
             case 'S':
