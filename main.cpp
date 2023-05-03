@@ -302,85 +302,85 @@ public:
         switch(input)
         {
             case '1':
-                if(game.getOneTicTacBoard(0).checkWin())
+                if(game.getOneTicTacBoard(0).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
-                    game.setCurrentBoard(input);
+                    game.setCurrentBoard(input-1);
                 break;
             case '2':
-                if(game.getOneTicTacBoard(1).checkWin())
+                if(game.getOneTicTacBoard(1).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
-                    game.setCurrentBoard(input);
+                    game.setCurrentBoard(input-1);
                 break;
             case '3':
-                if(game.getOneTicTacBoard(2).checkWin())
+                if(game.getOneTicTacBoard(2).checkWin()== true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
-                    game.setCurrentBoard(input);
+                    game.setCurrentBoard(input-1);
                 break;
             case '4':
-                if(game.getOneTicTacBoard(3).checkWin())
+                if(game.getOneTicTacBoard(3).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
-                    game.setCurrentBoard(input);
+                    game.setCurrentBoard(input-1);
                 break;
             case '5':
-                if(game.getOneTicTacBoard(4).checkWin())
+                if(game.getOneTicTacBoard(4).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
-                    game.setCurrentBoard(input);
+                    game.setCurrentBoard(input-1);
                 break;
             case '6':
-                if(game.getOneTicTacBoard(5).checkWin())
+                if(game.getOneTicTacBoard(5).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
-                    game.setCurrentBoard(input);
+                    game.setCurrentBoard(input-1);
                 break;
             case '7':
-                if(game.getOneTicTacBoard(6).checkWin())
+                if(game.getOneTicTacBoard(6).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
-                    game.setCurrentBoard(input);
+                    game.setCurrentBoard(input-1);
                 break;
             case '8':
-                if(game.getOneTicTacBoard(7).checkWin())
+                if(game.getOneTicTacBoard(7).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
-                    game.setCurrentBoard(input);
+                    game.setCurrentBoard(input-1);
                 break;
             case '9':
-                if(game.getOneTicTacBoard(8).checkWin())
+                if(game.getOneTicTacBoard(8).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
-                    game.setCurrentBoard(input);
+                    game.setCurrentBoard(input-1);
                 break;
             default:
                 printw("Input not recognized! Try Again!");
