@@ -294,6 +294,100 @@ public:
         menuForPlayingGame(game);
         
     }
+
+    int ifBoardAlreadyWon(GameBoard& game)
+    {
+        printw("Associated Board has been completed! Where would you like to go?");
+        char input = getch();
+        switch(input)
+        {
+            case '1':
+                if(game.getOneTicTacBoard(0).checkWin())
+                {
+                    printw("Board Already Completed! Please try again!");
+                    ifBoardAlreadyWon(game);
+                }
+                else
+                    game.setCurrentBoard(input);
+                break;
+            case '2':
+                if(game.getOneTicTacBoard(1).checkWin())
+                {
+                    printw("Board Already Completed! Please try again!");
+                    ifBoardAlreadyWon(game);
+                }
+                else
+                    game.setCurrentBoard(input);
+                break;
+            case '3':
+                if(game.getOneTicTacBoard(2).checkWin())
+                {
+                    printw("Board Already Completed! Please try again!");
+                    ifBoardAlreadyWon(game);
+                }
+                else
+                    game.setCurrentBoard(input);
+                break;
+            case '4':
+                if(game.getOneTicTacBoard(3).checkWin())
+                {
+                    printw("Board Already Completed! Please try again!");
+                    ifBoardAlreadyWon(game);
+                }
+                else
+                    game.setCurrentBoard(input);
+                break;
+            case '5':
+                if(game.getOneTicTacBoard(4).checkWin())
+                {
+                    printw("Board Already Completed! Please try again!");
+                    ifBoardAlreadyWon(game);
+                }
+                else
+                    game.setCurrentBoard(input);
+                break;
+            case '6':
+                if(game.getOneTicTacBoard(5).checkWin())
+                {
+                    printw("Board Already Completed! Please try again!");
+                    ifBoardAlreadyWon(game);
+                }
+                else
+                    game.setCurrentBoard(input);
+                break;
+            case '7':
+                if(game.getOneTicTacBoard(6).checkWin())
+                {
+                    printw("Board Already Completed! Please try again!");
+                    ifBoardAlreadyWon(game);
+                }
+                else
+                    game.setCurrentBoard(input);
+                break;
+            case '8':
+                if(game.getOneTicTacBoard(7).checkWin())
+                {
+                    printw("Board Already Completed! Please try again!");
+                    ifBoardAlreadyWon(game);
+                }
+                else
+                    game.setCurrentBoard(input);
+                break;
+            case '9':
+                if(game.getOneTicTacBoard(8).checkWin())
+                {
+                    printw("Board Already Completed! Please try again!");
+                    ifBoardAlreadyWon(game);
+                }
+                else
+                    game.setCurrentBoard(input);
+                break;
+            default:
+                printw("Input not recognized! Try Again!");
+                ifBoardAlreadyWon(game);
+                break;
+        }
+    }
     
     char menuForPlayingGame(GameBoard& game){
         /*this function will take input and detect what is pressed. If a number is pressed it needs to check (or call function) that sees in the number pressed is a valid board space. Display should be the spots availiable in the current square, save, load, quit.
@@ -305,7 +399,7 @@ public:
         printw("Choose Save(S/s)\nQuit(Q/q)\nOr one of the following squares(1-9): ");
         for (int i = 0; i < 9; i++)
         {
-            if (game.getOneTicTacBoard(i).checkWin() == false)
+            if (game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(i) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(i) != 'o')
             {
                 printw("%d ",i+1);
                 
@@ -318,264 +412,311 @@ public:
         
         switch(input){
             case '1':
-                if (game.getOneTicTacBoard(0).checkWin())
+                if(game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'o')
                 {
-                    printw("This square has already been won!");
-                    getch();
-                    clear();
-                    break;
-                }
-                else
-                {
-                    printw("Square 1 selected!");
-                    game.setCurrentBoard(0);
-                    printw("Choose another square (1-9)");
-                    input = getch();
-                    if (game.getOneTicTacBoard(0).getElement(input) != 'x' && game.getOneTicTacBoard(0).getElement(input) != 'o')
+                    if(game.getTurn() == 1)
                     {
-                        if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(0).setElement(input-1, 'x');
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
                         else
-                            game.getOneTicTacBoard(0).setElement(input-1, 'o');
-                        playGame(game);
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
                     else
                     {
-                        printw("Square is already played!");
-                        menuForPlayingGame(game);
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
+                        else
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
-                    break;
                 }
+                else
+                {
+                    printw("Square Already Occupied!");
+                    menuForPlayingGame(game);
+                }
+                break;
             case '2':
-                if (game.getOneTicTacBoard(1).checkWin())
+                if(game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'o')
                 {
-                    printw("This square has already been won!");
-                    getch();
-                    clear();
-                    break;
-                }
-                else
-                {
-                    printw("Square 2 selected!");
-                    game.setCurrentBoard(1);
-                    printw("Choose another square (1-9)");
-                    input = getch();
-                    if (game.getOneTicTacBoard(1).getElement(input) != 'x' && game.getOneTicTacBoard(1).getElement(input) != 'o')
+                    if(game.getTurn() == 1)
                     {
-                        if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(1).setElement(input-1, 'x');
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
                         else
-                            game.getOneTicTacBoard(1).setElement(input-1, 'o');
-                        playGame(game);
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
                     else
                     {
-                        printw("Square is already played!");
-                        menuForPlayingGame(game);
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
+                        else
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
-                    break;
                 }
+                else
+                {
+                    printw("Square Already Occupied!");
+                    menuForPlayingGame(game);
+                }
+                break;
             case '3':
-                if (game.getOneTicTacBoard(2).checkWin())
+                if(game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'o')
                 {
-                    printw("This square has already been won!");
-                    getch();
-                    clear();
-                    break;
-                }
-                else
-                {
-                    printw("Square 3 selected!");
-                    game.setCurrentBoard(2);
-                    printw("Choose another square (1-9)");
-                    input = getch();
-                    if (game.getOneTicTacBoard(2).getElement(input) != 'x' && game.getOneTicTacBoard(2).getElement(input) != 'o')
+                    if(game.getTurn() == 1)
                     {
-                        if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(2).setElement(input-1, 'x');
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
                         else
-                            game.getOneTicTacBoard(2).setElement(input-1, 'o');
-                        playGame(game);
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
                     else
                     {
-                        printw("Square is already played!");
-                        menuForPlayingGame(game);
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
+                        else
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
-                    break;
                 }
+                else
+                {
+                    printw("Square Already Occupied!");
+                    menuForPlayingGame(game);
+                }
+                break;
             case '4':
-                if (game.getOneTicTacBoard(3).checkWin())
+                if(game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'o')
                 {
-                    printw("This square has already been won!");
-                    getch();
-                    clear();
-                    break;
-                }
-                else
-                {
-                    printw("Square 4 selected!");
-                    game.setCurrentBoard(3);
-                    printw("Choose another square (1-9)");
-                    input = getch();
-                    if (game.getOneTicTacBoard(3).getElement(input) != 'x' && game.getOneTicTacBoard(3).getElement(input) != 'o')
+                    if(game.getTurn() == 1)
                     {
-                        if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(3).setElement(input - 1, 'x');
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
                         else
-                            game.getOneTicTacBoard(3).setElement(input-1, 'o');
-                        playGame(game);
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
                     else
                     {
-                        printw("Square is already played!");
-                        menuForPlayingGame(game);
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
+                        else
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
-                    break;
                 }
+                else
+                {
+                    printw("Square Already Occupied!");
+                    menuForPlayingGame(game);
+                }
+                break;
             case '5':
-                if (game.getOneTicTacBoard(4).checkWin())
+                if(game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'o')
                 {
-                    printw("This square has already been won!");
-                    getch();
-                    clear();
-                    break;
-                }
-                else
-                {
-                    printw("Square 5 selected!");
-                    game.setCurrentBoard(4);
-                    printw("Choose another square (1-9)");
-                    input = getch();
-                    if (game.getOneTicTacBoard(4).getElement(input) != 'x' && game.getOneTicTacBoard(4).getElement(input) != 'o')
+                    if(game.getTurn() == 1)
                     {
-                        if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(4).setElement(input-1, 'x');
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
                         else
-                            game.getOneTicTacBoard(4).setElement(input-1, 'o');
-                        playGame(game);
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
                     else
                     {
-                        printw("Square is already played!");
-                        menuForPlayingGame(game);
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
+                        else
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
-                    break;
                 }
+                else
+                {
+                    printw("Square Already Occupied!");
+                    menuForPlayingGame(game);
+                }
+                break;
             case '6':
-                if (game.getOneTicTacBoard(5).checkWin())
+                if(game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'o')
                 {
-                    printw("This square has already been won!");
-                    getch();
-                    clear();
-                    break;
-                }
-                else
-                {
-                    printw("Square 6 selected!");
-                    game.setCurrentBoard(5); printw("Choose another square (1-9)");
-                    input = getch();
-                    if (game.getOneTicTacBoard(5).getElement(input) != 'x' && game.getOneTicTacBoard(5).getElement(input) != 'o')
+                    if(game.getTurn() == 1)
                     {
-                        if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(5).setElement(input-1, 'x');
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
                         else
-                            game.getOneTicTacBoard(5).setElement(input-1, 'o');
-                        playGame(game);
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
                     else
                     {
-                        printw("Square is already played!");
-                        menuForPlayingGame(game);
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
+                        else
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
-                    break;
                 }
+                else
+                {
+                    printw("Square Already Occupied!");
+                    menuForPlayingGame(game);
+                }
+                break;
             case '7':
-                if (game.getOneTicTacBoard(6).checkWin())
+                if(game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'o')
                 {
-                    printw("This square has already been won!");
-                    getch();
-                    clear();
-                    break;
-                }
-                else
-                {
-                    printw("Square 7 selected!");
-                    game.setCurrentBoard(6);
-                    printw("Choose another square (1-9)");
-                    input = getch();
-                    if (game.getOneTicTacBoard(6).getElement(input) != 'x' && game.getOneTicTacBoard(6).getElement(input) != 'o')
+                    if(game.getTurn() == 1)
                     {
-                        if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(6).setElement(input-1, 'x');
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
                         else
-                            game.getOneTicTacBoard(6).setElement(input-1, 'o');
-                        playGame(game);
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
                     else
                     {
-                        printw("Square is already played!");
-                        menuForPlayingGame(game);
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
+                        else
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
-                    break;
                 }
+                else
+                {
+                    printw("Square Already Occupied!");
+                    menuForPlayingGame(game);
+                }
+                break;
             case '8':
-                if (game.getOneTicTacBoard(7).checkWin())
+                if(game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'o')
                 {
-                    printw("This square has already been won!");
-                    getch();
-                    clear();
-                    break;
-                }
-                else
-                {
-                    printw("Square 8 selected!");
-                    game.setCurrentBoard(7);
-                    printw("Choose another square (1-9)");
-                    input = getch();
-                    if (game.getOneTicTacBoard(7).getElement(input) != 'x' && game.getOneTicTacBoard(7).getElement(input) != 'o')
+                    if(game.getTurn() == 1)
                     {
-                        if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(7).setElement(input-1, 'x');
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
                         else
-                            game.getOneTicTacBoard(7).setElement(input-1, 'o');
-                        playGame(game);
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
                     else
                     {
-                        printw("Square is already played!");
-                        menuForPlayingGame(game);
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
+                        else
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
-                    break;
                 }
+                else
+                {
+                    printw("Square Already Occupied!");
+                    menuForPlayingGame(game);
+                }
+                break;
             case '9':
-                if (game.getOneTicTacBoard(8).checkWin())
+                if(game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'o')
                 {
-                    printw("This square has already been won!");
-                    getch();
-                    clear();
-                    break;
-                }
-                else
-                {
-                    printw("Square 9 selected!");
-                    game.setCurrentBoard(8);
-                    printw("Choose another square (1-9)");
-                    input = getch();
-                    if (game.getOneTicTacBoard(8).getElement(input) != 'x' && game.getOneTicTacBoard(8).getElement(input) != 'o')
+                    if(game.getTurn() == 1)
                     {
-                        if (game.currentTurn == 1)
-                            game.getOneTicTacBoard(8).setElement(input-1, 'x');
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
                         else
-                            game.getOneTicTacBoard(8).setElement(input-1, 'o');
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
                     else
                     {
-                        printw("Square is already played!");
-                        menuForPlayingGame(game);
+                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        if(game.getOneTicTacBoard(input-1).checkWin())
+                        {
+                            ifBoardAlreadyWon(game);
+                        }
+                        else
+                        {
+                            game.setCurrentBoard(input-1);
+                        }
                     }
-                    break;
                 }
+                else
+                {
+                    printw("Square Already Occupied!");
+                    menuForPlayingGame(game);
+                }
+                break;
             case 'S':
                 printw("S was entered");
                 saveGame(game);
