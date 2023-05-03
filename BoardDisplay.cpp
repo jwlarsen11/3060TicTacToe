@@ -1,9 +1,9 @@
-#include <iostream>
-#include <ncurses.h>
-using namespace std;
 
-// XMAX y YMAX must be multiple of 9.
-#define XMAX 54
+#include <ncurses.h>
+#include<iostream>
+
+//XMAX and YMAX must be a multiple of 9
+#define XMAX 72
 #define YMAX 36
 
 typedef struct {
@@ -15,47 +15,82 @@ typedef struct {
     int jugador;                // Actual player.
     int movimientos;            // Number of moves.
     int mover;                  // Is moving any chip?
-} GameBoard;
+} Gameboard;
 
-void drawGameboard(GameBoard *Gameboard)      // Draw gameboard
+
+void drawBoard(Gameboard *board, int color, int grid)      // Draw gameboard
 {
     int i, j;
-
+    attron(COLOR_PAIR(color));
     for(i=0; i<=YMAX; i++)
         for(j=0; j<=XMAX; j++)
         {
-            if (i == 0)   // First row of the gameboard.
+            if (i == 0)   // Firs row of the gameboard.
             {
                 if (j == 0)              // Upper-Left corner.
-                    mvaddch(Gameboard->y+i, Gameboard->x+j, ACS_ULCORNER);
+                    mvaddch(board->y+i, board->x+j, ACS_ULCORNER);
                 else if (j == XMAX)     // Upper-Right corner.
-                    mvaddch(Gameboard->y+i, Gameboard->x+j, ACS_URCORNER);
-                else if (j % (XMAX / 9) == 0)   // Middle columns.
-                    mvaddch(Gameboard->y+i, Gameboard->x+j, ACS_TTEE);
+                    mvaddch(board->y+i, board->x+j, ACS_URCORNER);
+                else if (j % (XMAX / grid) == 0)   // Middle column.
+                    mvaddch(board->y+i, board->x+j, ACS_TTEE);
                 else                    // Normal lines.
-                    mvaddch(Gameboard->y+i, Gameboard->x+j, ACS_HLINE);
+                    mvaddch(board->y+i, board->x+j, ACS_HLINE);
             }
-
-            else if (j % (XMAX / 9) == 0)   // Middle lines.
+            
+            else if (i % (YMAX / grid) == 0 && i != YMAX)   // Dividers.
             {
-                mvaddch(Gameboard->y+i, Gameboard->x+j, ACS_VLINE);
+                if (j == 0)             // First column.
+                    mvaddch(board->y+i, board->x+j, ACS_LTEE);
+                else if (j == XMAX)     // Last column.
+                    mvaddch(board->y+i, board->x+j, ACS_RTEE);
+                else if (j % (XMAX / grid) == 0)   // Middle column.
+                    mvaddch(board->y+i, board->x+j, ACS_PLUS);
+                else                    // Normal lines.
+                    mvaddch(board->y+i, board->x+j, ACS_HLINE);
+            }
+            
+            else if (i == YMAX)             // Last row
+            {
+                if (j == 0)              // Lower-Left corner.
+                    mvaddch(board->y+i, board->x+j, ACS_LLCORNER);
+                else if (j == XMAX)     // Lower-Right corner.
+                    mvaddch(board->y+i, board->x+j, ACS_LRCORNER);
+                else if (j % (XMAX / grid) == 0)   // Middle column.
+                    mvaddch(board->y+i, board->x+j, ACS_BTEE);
+                else                    // Normal lines.
+                    mvaddch(board->y+i, board->x+j, ACS_HLINE);
+            }
+            
+            else if (j % (XMAX / grid) == 0)   // Middle lines.
+            {
+                mvaddch(board->y+i, board->x+j, ACS_VLINE);
             }
         }
-}//drawGameboard
+  attroff(COLOR_PAIR(color));
+}//drawBoard
 
-int main(int argc, char **argv){
-
-    GameBoard Gameboard;
+int main()
+{
+    Gameboard Board;
 
     // Centering the gameboard on the screen.
-    Gameboard.x = (80-XMAX)/2;
-    Gameboard.y = 3;
+    Board.x = (80-XMAX)/2;
+    Board.y = 3;
 
-        //initialize screen
-        initscr();
+    initscr();
+    start_color();
+    noecho();
+    cbreak;
+    curs_set(FALSE);        // Disable the console cursor.
+    init_pair(1, COLOR_CYAN, COLOR_BLACK);
+    init_pair(2, COLOR_WHITE,COLOR_BLACK);
 
-         drawGameboard(&Gameboard);
+    drawBoard(&Board,2,9);
+    drawBoard(&Board,1,3);
+    
+    getch();
+    resetty();
+    endwin();
 
-        getch();
-        endwin();
+    return 0;
 }
