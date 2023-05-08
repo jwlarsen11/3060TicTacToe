@@ -298,10 +298,11 @@ public:
     int ifBoardAlreadyWon(GameBoard& game)
     {
         printw("Associated Board has been completed! Where would you like to go?");
-        char input = getch();
+        char inputChar = getch();
+        int input = (int)inputChar;
         switch(input)
         {
-            case '1':
+            case 1:
                 if(game.getOneTicTacBoard(0).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
@@ -310,7 +311,7 @@ public:
                 else
                     game.setCurrentBoard(input-1);
                 break;
-            case '2':
+            case 2:
                 if(game.getOneTicTacBoard(1).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
@@ -319,7 +320,7 @@ public:
                 else
                     game.setCurrentBoard(input-1);
                 break;
-            case '3':
+            case 3:
                 if(game.getOneTicTacBoard(2).checkWin()== true)
                 {
                     printw("Board Already Completed! Please try again!");
@@ -328,7 +329,7 @@ public:
                 else
                     game.setCurrentBoard(input-1);
                 break;
-            case '4':
+            case 4:
                 if(game.getOneTicTacBoard(3).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
@@ -337,7 +338,7 @@ public:
                 else
                     game.setCurrentBoard(input-1);
                 break;
-            case '5':
+            case 5:
                 if(game.getOneTicTacBoard(4).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
@@ -346,7 +347,7 @@ public:
                 else
                     game.setCurrentBoard(input-1);
                 break;
-            case '6':
+            case 6:
                 if(game.getOneTicTacBoard(5).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
@@ -355,7 +356,7 @@ public:
                 else
                     game.setCurrentBoard(input-1);
                 break;
-            case '7':
+            case 7:
                 if(game.getOneTicTacBoard(6).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
@@ -364,7 +365,7 @@ public:
                 else
                     game.setCurrentBoard(input-1);
                 break;
-            case '8':
+            case 8:
                 if(game.getOneTicTacBoard(7).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
@@ -373,7 +374,7 @@ public:
                 else
                     game.setCurrentBoard(input-1);
                 break;
-            case '9':
+            case 9:
                 if(game.getOneTicTacBoard(8).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
@@ -393,8 +394,8 @@ public:
         /*this function will take input and detect what is pressed. If a number is pressed it needs to check (or call function) that sees in the number pressed is a valid board space. Display should be the spots availiable in the current square, save, load, quit.
          */
         
-        char input;
-        
+        char inputChar;
+        int input;
         move(15, 0);
         printw("Choose Save(S/s)\nQuit(Q/q)\nOr one of the following squares(1-9): ");
         for (int i = 0; i < 9; i++)
@@ -406,23 +407,23 @@ public:
             }
         }
         printw("\n");
-        input = getch();
+        inputChar = getch();
         
-        input = toupper(input);
-        
-        if(input == 'S')
+        inputChar = toupper(inputChar);
+        if(inputChar == 'S')
         {
             printw("S was entered");
             saveGame(game);
             break;
         }
-        else if(input == 'Q')
+        else if(inputChar == 'Q')
         {
             printw("Q was entered");
             break;
         }
-        else if(input == '1' || input == '2' || input == '3' || input == '4' || input == '5' || input == '6' || input == '7' || input == '8' || input == '9')
+        else if(inputChar == '1' || inputChar == '2' || inputChar == '3' || inputChar == '4' || inputChar == '5' || inputChar == '6' || inputChar == '7' || inputChar == '8' || inputChar == '9')
         {
+            input = (int)inputChar;
             if(game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'o')
                 {
                     if(game.getTurn() == 1)
