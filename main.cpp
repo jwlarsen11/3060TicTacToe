@@ -204,7 +204,7 @@ GameBoard :: GameBoard() {
         //****************************
         //for testing purposes should be removed upon logic completion
         //******************************
-        //entireGame[i]->fill();
+       // entireGame[i]->fill();
         
     }
     //start in the middle
@@ -223,16 +223,16 @@ void GameBoard :: displayGameBoard(int boardToDisplay) {
             move(currentCursorY, currentCursorX);
             //logic will be if the board number is the current board being played display everything else just display a x and o.
             if(currentBoard == boardToDisplay)
-                entireGame[k]->displayBoard(currentCursorY,currentCursorX,true);
+                entireGame[currentBoard]->displayBoard(currentCursorY,currentCursorX,true);
             else
-                entireGame[k]->displayBoard(currentCursorY,currentCursorX,false);
+                entireGame[currentBoard]->displayBoard(currentCursorY,currentCursorX,false);
             //set cursor to right of it
             currentCursorX += 7;
             currentBoard++;
         }
         //set cursor to the needed recent column and reset x to the left hand side
-        currentCursorY +=4;
         currentCursorX = 0;
+        currentCursorY +=4;
     }
 }
 char GameBoard :: getElementInOneSquare(TicTacBoard& square,int index){
@@ -299,7 +299,7 @@ public:
     void ifBoardAlreadyWon(GameBoard& game)
     {
         refresh();
-        printw("Associated Board has been completed! Where would you like to go?");
+        printw("Associated Board has been completed! Where would you like to go?\n");
         char inputChar = getch();
         int input = inputChar - '0';
         switch(input)
@@ -454,8 +454,6 @@ public:
         }
         else if(inputChar == '1' || inputChar == '2' || inputChar == '3' || inputChar == '4' || inputChar == '5' || inputChar == '6' || inputChar == '7' || inputChar == '8' || inputChar == '9')
         {
-            //input = (int)inputChar;
-            
             if(game.getOneTicTacBoard(currentBoardNum).getElement(input-1) != 'x' && game.getOneTicTacBoard(currentBoardNum).getElement(input-1) != 'o')
                 {
                     if(game.getTurn() == 1)
@@ -642,9 +640,7 @@ int main() {
     
     GameBoard test;
     logic bigBrain;
-    
     bigBrain.gameOpened();
-    
     
     printw("\n\nThanks for playing! Press any key to quit.");
     refresh();
