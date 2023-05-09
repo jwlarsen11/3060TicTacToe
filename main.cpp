@@ -19,8 +19,11 @@ private:
     TicTacBoard* entireGame[9];
     int currentBoard;
     int boardWinner;
+  
     
 public:
+       int x;
+       int y;
     //defined later because we need TicTacBoard methods which aren't defined at this point in the program.
     GameBoard();
     int currentTurn; //player 1 or 2
@@ -324,7 +327,7 @@ TicTacBoard GameBoard :: getOneTicTacBoard(int index){
 }
 
 //Class that handles all of the display needs of the Gameboard and therefore needs to inherit properties of the Gameboard
-class Display: protected TicTacBoard{
+class Display: protected GameBoard{
   private:
   int XMAX = 72;
   int YMAX = 36;
@@ -481,8 +484,8 @@ class Display: protected TicTacBoard{
     init_pair(4, COLOR_GREEN,COLOR_BLACK);//x color
 
     //drawing the grid
-    drawGrid(&board,2,9);
-    drawGrid(&board,1,3);    
+    drawGrid(board,2,9);
+    drawGrid(board,1,3);    
   } //drawBoard
 
 //converts the information from the boards to be used in the display properly
@@ -1060,6 +1063,7 @@ int main() {
     noecho();            /* Don't echo() while we do getch */
     
     GameBoard test;
+    Display disp;
     logic bigBrain;
     bigBrain.gameOpened();
     
