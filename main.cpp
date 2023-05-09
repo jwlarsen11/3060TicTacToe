@@ -28,6 +28,7 @@ public:
     char getElementInOneSquare(TicTacBoard& square, int index);
     void setElementInOneSquare(int boardIndex, int squareindex,char newElement);
     TicTacBoard getOneTicTacBoard(int index);
+    bool checkGameOver();
     
     GameBoard& operator=(const GameBoard& other);
     
@@ -230,9 +231,9 @@ bool GameBoard :: checkGameOver()
         //horizontals
         while (!gameOver && compares < maxCompares) {
             //notice that string compare was not used. Because we're comparing 2 chars == is fine.
-            if (entireGame[index].getWinner() == entireGame[index + 1].getWinner() && entireGame[index].getWinner() == entireGame[index + 2].getWinner()) {
+            if (entireGame[index]->getWinner() == entireGame[index + 1]->getWinner() && entireGame[index]->getWinner() == entireGame[index + 2]->getWinner()) {
                 completed = true;
-                if (entireGame[index].getWinner() == 'x') {
+                if (entireGame[index]->getWinner() == 'x') {
                     boardWinner = 1;
                 }
                 else {
@@ -251,9 +252,9 @@ bool GameBoard :: checkGameOver()
         maxCompares = 3;
         compares = 0;
         while (!gameOver && compares < maxCompares) {
-            if (entireGame[index].getWinner() == entireGame[index + 3].getWinner() && entireGame[index].getWinner() == entireGame[index + 6].getWinner()) {
+            if (entireGame[index]->getWinner() == entireGame[index + 3]->getWinner() && entireGame[index]->getWinner() == entireGame[index + 6]->getWinner()) {
                 completed = true;
-                if (entireGame[index].getWinner() == 'x') {
+                if (entireGame[index]->getWinner() == 'x') {
                     boardWinner = 1;
                 }
                 else {
@@ -267,18 +268,18 @@ bool GameBoard :: checkGameOver()
 
         //diagonals are not related so 2 if statements will do.
         //could be used in a larger board with [0],[counter*(sizeOfBoard+1)]
-        if (entireGame[0].getWinner() == entireGame[4].getWinner() && entireGame[0].getWinner() == entireGame[8].getWinner()) {
+        if (entireGame[0]->getWinner() == entireGame[4]->getWinner() && entireGame[0]->getWinner() == entireGame[8]->getWinner()) {
             completed = true;
-            if (entireGame[0].getWinner() == 'x') {
+            if (entireGame[0]->getWinner() == 'x') {
                 boardWinner = 1;
             }
             else {
                 boardWinner = 2;
             }
         }
-        if (entireGame[2].getWinner() == entireGame[4].getWinner() && entireGame[0].getWinner() == entireGame[6].getWinner()) {
+        if (entireGame[2]->getWinner() == entireGame[4]->getWinner() && entireGame[0]->getWinner() == entireGame[6]->getWinner()) {
             completed = true;
-            if (entireGame[2].getWinner() == 'x') {
+            if (entireGame[2]->getWinner() == 'x') {
                 boardWinner = 1;
             }
             else {
@@ -389,7 +390,7 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
-                    if(turn = 1)
+                    if(turn == 1)
                                 turn = 2;
                             else
                                 turn = 1;
@@ -405,7 +406,7 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
-                    if(turn = 1)
+                    if(turn == 1)
                                 turn = 2;
                             else
                                 turn = 1;
@@ -421,7 +422,7 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
-                    if(turn = 1)
+                    if(turn == 1)
                                 turn = 2;
                             else
                                 turn = 1;
@@ -437,7 +438,7 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
-                    if(turn = 1)
+                    if(turn == 1)
                                 turn = 2;
                             else
                                 turn = 1;
@@ -453,7 +454,7 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
-                    if(turn = 1)
+                    if(turn == 1)
                                 turn = 2;
                             else
                                 turn = 1;
@@ -469,7 +470,7 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
-                    if(turn = 1)
+                    if(turn == 1)
                                 turn = 2;
                             else
                                 turn = 1;
@@ -485,7 +486,7 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
-                    if(turn = 1)
+                    if(turn == 1)
                                 turn = 2;
                             else
                                 turn = 1;
@@ -501,7 +502,7 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
-                    if(turn = 1)
+                    if(turn == 1)
                                 turn = 2;
                             else
                                 turn = 1;
@@ -517,7 +518,7 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
-                    if(turn = 1)
+                    if(turn == 1)
                                 turn = 2;
                             else
                                 turn = 1;
@@ -536,9 +537,16 @@ public:
          */
         game.displayGameBoard(currentBoardNum);
         refresh();
-        if(checkGameOver)
+        
+        if(!game.checkGameOver())
         {
-            printw("Player " + turn.toString() + " wins!");
+            if (turn == 1){
+                printw("Player 1 wins!");
+            }
+            else if(turn ==2){
+                printw("Player 2 wins!");
+                
+            }
             return turn;
         }
         
@@ -584,7 +592,7 @@ public:
                         {
                             game.setCurrentBoard(input-1);
                             currentBoardNum = input-1;
-                            if(turn = 1)
+                            if(turn == 1)
                                 turn = 2;
                             else
                                 turn = 1;
@@ -602,7 +610,7 @@ public:
                         {
                             game.setCurrentBoard(input-1);
                             currentBoardNum = input-1;
-                            if(turn = 1)
+                            if(turn == 1)
                                 turn = 2;
                             else
                                 turn = 1;
