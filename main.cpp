@@ -323,6 +323,294 @@ TicTacBoard GameBoard :: getOneTicTacBoard(int index){
     return *entireGame[index];
 }
 
+//Class that handles all of the display needs of the Gameboard and therefore needs to inherit properties of the Gameboard
+class Display: protected TicTacBoard{
+  private:
+  int XMAX = 72;
+  int YMAX = 36;
+  char fixchax[18] = {1,1,0,0,1,1,
+                    0,0,1,1,0,0,
+                    1,1,0,0,1,1
+                    };
+
+  char fixchao[18] = {0,1,1,1,1,0,
+                    1,1,0,0,1,1,
+                    0,1,1,1,1,0
+                   };
+  char beegx[160] = {1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
+                  1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
+                  0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,
+                  0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
+                  0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+                  0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+                  0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
+                  0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,
+                  1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
+                  1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1
+                  };
+
+  char beego[160] = {0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,
+                  0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
+                  0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+                  1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,
+                  1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,
+                  1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,
+                  1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,
+                  0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+                  0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
+                  0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0
+                  };
+  public:
+    void drawGrid(GameBoard *board, int color, int grid)      // Draw gameboard
+  {
+      int i, j;
+      attron(COLOR_PAIR(color));
+      for(i=0; i<=YMAX; i++)
+          for(j=0; j<=XMAX; j++)
+          {
+              if (i == 0)   // Firs row of the gameboard.
+              {
+                  if (j == 0)              // Upper-Left corner.
+                      mvaddch(board->y+i, board->x+j, ACS_ULCORNER);
+                 else if (j == XMAX)     // Upper-Right corner.
+                     mvaddch(board->y+i, board->x+j, ACS_URCORNER);
+                 else if (j % (XMAX / grid) == 0)   // Middle column.
+                      mvaddch(board->y+i, board->x+j, ACS_TTEE);
+                 else                    // Normal lines.
+                      mvaddch(board->y+i, board->x+j, ACS_HLINE);
+              }
+            
+              else if (i % (YMAX / grid) == 0 && i != YMAX)   // Dividers.
+              {
+                if (j == 0)             // First column.
+                    mvaddch(board->y+i, board->x+j, ACS_LTEE);
+                else if (j == XMAX)     // Last column.
+                    mvaddch(board->y+i, board->x+j, ACS_RTEE);
+                else if (j % (XMAX / grid) == 0)   // Middle column.
+                    mvaddch(board->y+i, board->x+j, ACS_PLUS);
+                else                    // Normal lines.
+                    mvaddch(board->y+i, board->x+j, ACS_HLINE);
+              }
+            
+              else if (i == YMAX)             // Last row
+              {
+                if (j == 0)              // Lower-Left corner.
+                    mvaddch(board->y+i, board->x+j, ACS_LLCORNER);
+                else if (j == XMAX)     // Lower-Right corner.
+                    mvaddch(board->y+i, board->x+j, ACS_LRCORNER);
+                else if (j % (XMAX / grid) == 0)   // Middle column.
+                    mvaddch(board->y+i, board->x+j, ACS_BTEE);
+                else                    // Normal lines.
+                    mvaddch(board->y+i, board->x+j, ACS_HLINE);
+              }
+            
+              else if (j % (XMAX / grid) == 0)   // Middle lines.
+              {
+                mvaddch(board->y+i, board->x+j, ACS_VLINE);
+              }
+        }
+    attroff(COLOR_PAIR(color));
+  }//drawGrid
+
+  //Drawing the chips
+  void drawChips(int *dest, char chip, GameBoard *board)
+  {
+    int i, j;
+    int y, x;
+    
+    for (i=0; i<3; i++)     // Chip height
+        for (j=0; j<6; j++)     // Chip width
+        {
+            y = YMAX/9 * dest[0] + i + board->y + 1;
+            x = XMAX/9 * dest[1] + j + board->x + 2;
+            if (fixchax[j+6*i] == 1 && chip == 'x')          // If X chip...
+            {
+                attron(COLOR_PAIR(4));
+                mvaddch(y, x, '#');
+                attroff(COLOR_PAIR(4));
+            }
+            
+            else if (fixchao[j+6*i] == 1 && chip == 'o')     // If O chip...
+            {
+                attron(COLOR_PAIR(3));
+                mvaddch(y, x, '#');
+                attroff(COLOR_PAIR(3));
+            }
+            
+            else    // Print spaces.
+            {
+                //
+            }
+        }
+  }//drawChips
+
+  void drawBeegChips(int *dest, char chip, GameBoard *board){
+    int i, j;
+    int y, x;
+    
+    for (i=0; i<10; i++)     // Chip height
+        for (j=0; j<16; j++)     // Chip width
+        {
+            y = YMAX/3 * dest[0] + i + board->y + 2;
+            x = XMAX/3 * dest[1] + j + board->x + 5;
+            if (fixchax[j+16*i] == 1 && chip == 'x')          // If X chip...
+            {
+                attron(COLOR_PAIR(4));
+                mvaddch(y, x, '#');
+                attroff(COLOR_PAIR(4));
+            }
+            
+            else if (fixchao[j+16*i] == 1 && chip == 'o')     // If O chip...
+            {
+                attron(COLOR_PAIR(3));
+                mvaddch(y, x, '#');
+                attroff(COLOR_PAIR(3));
+            }
+            
+            else    // Print spaces.
+            {
+                //
+            }
+        }
+  }//drawBeegChips
+
+  void drawBoard(GameBoard *board){
+    init_pair(1, COLOR_CYAN, COLOR_BLACK); //3x3 color
+    init_pair(2, COLOR_WHITE,COLOR_BLACK); // 9x9 color
+    init_pair(3, COLOR_YELLOW,COLOR_BLACK);// o color
+    init_pair(4, COLOR_GREEN,COLOR_BLACK);//x color
+
+    //drawing the grid
+    drawGrid(&board,2,9);
+    drawGrid(&board,1,3);    
+  } //drawBoard
+
+//converts the information from the boards to be used in the display properly
+void convertToCoordsBeeg(int boardNum, int *coord){
+  switch(boardNum){
+    case 0:
+    coord[0] = 0;
+    coord[1] = 0;
+    break;
+    case 1:
+    coord[0] = 0;
+    coord[1] = 1;
+    break;
+    case 2:
+    coord[0] = 0;
+    coord[1] = 2;
+    break;
+    case 3:
+    coord[0] = 1;
+    coord[1] = 0;
+    break;
+    case 4:
+    coord[0] = 1;
+    coord[1] = 1;
+    break;
+    case 5:
+    coord[0] = 1;
+    coord[1] = 2;
+    break;
+    case 6:
+    coord[0] = 2;
+    coord[1] = 0;
+    break;
+    case 7:
+    coord[0] = 2;
+    coord[1] = 1;
+    break;
+    case 8:
+    coord[0] = 2;
+    coord[1] = 2;
+    break;
+  }
+}//convertToCoordsBeeg
+
+void startLittle(int boardNum, int *coord){
+  switch(boardNum){
+    case 0:
+    coord[0] = 0;
+    coord[1] = 0;
+    break;
+    case 1:
+    coord[0] = 0;
+    coord[1] = 3;
+    break;
+    case 2:
+    coord[0] = 0;
+    coord[1] = 6;
+    break;
+    case 3:
+    coord[0] = 3;
+    coord[1] = 0;
+    break;
+    case 4:
+    coord[0] = 3;
+    coord[1] = 3;
+    break;
+    case 5:
+    coord[0] = 3;
+    coord[1] = 6;
+    break;
+    case 6:
+    coord[0] = 6;
+    coord[1] = 0;
+    break;
+    case 7:
+    coord[0] = 6;
+    coord[1] = 3;
+    break;
+    case 8:
+    coord[0] = 6;
+    coord[1] = 6;
+    break;
+  }
+}//startLittle
+
+  void addLittle(int *coord, int place){
+    switch(place){
+      case 0:
+      break;
+      case 1:
+      coord[1] += 1;
+      break;
+      case 2:
+      coord[1] += 2;
+      break;
+      case 3:
+      coord[0] += 1;
+      break;
+      case 4:
+      coord[0] += 1;
+      coord[1] += 1;
+      break;
+      case 5:
+      coord[0] += 1;
+      coord[1] += 2;
+      break;
+      case 6:
+      coord[0] += 2;
+      break;
+      case 7:
+      coord[0] += 2;
+      coord[1] += 1;
+      break;
+      case 8:
+      coord[0] += 2;
+      coord[1] += 2;
+      break;
+    }
+  }//addLittle
+
+int convertLittle(int *coord,int boardNum, int place){
+  startLittle(boardNum, coord);
+  addLittle(coord, place);
+  return 0;
+}//convertLittle
+
+};//Display Class
+
 /*
 //this overloads the '=' operator. Made for the load function (potentially)
 GameBoard& GameBoard::operator=(const GameBoard& other) {
