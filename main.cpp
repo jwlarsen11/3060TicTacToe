@@ -561,6 +561,13 @@ public:
             }
         }
         printw("\n");
+        if(turn ==1){
+            printw("Current turn is 'X'");
+        }
+        else{
+            printw("Current turn is 'O'");
+        }
+        printw("\n");
         inputChar = getch();
         input = inputChar - '0';
         inputChar = toupper(inputChar);
