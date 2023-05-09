@@ -82,6 +82,11 @@ public:
     void setElement(int index, char newElemnet){
         avaiableSquares[index] = newElemnet;
     }
+
+    char getWinner()
+    {
+        return winner;
+    }
     
     void displayBoard(int currentCursorY,int currentCursorX, bool displayAll) {
         int count = 0;
@@ -213,6 +218,76 @@ GameBoard :: GameBoard() {
     boardWinner = false;
 }
 
+bool GameBoard :: checkGameOver()
+    {
+        bool completed = false;
+        bool gameOver = false;
+
+        int index = 0;
+        int maxCompares = 3;
+        int compares = 0;
+
+        //horizontals
+        while (!gameOver && compares < maxCompares) {
+            //notice that string compare was not used. Because we're comparing 2 chars == is fine.
+            if (entireGame[index].getWinner() == entireGame[index + 1].getWinner() && entireGame[index].getWinner() == entireGame[index + 2].getWinner()) {
+                completed = true;
+                if (entireGame[index].getWinner() == 'x') {
+                    boardWinner = 1;
+                }
+                else {
+                    boardWinner = 2;
+                }
+            }
+            //next row
+            //could be used with a larger board via a loop for length of board and index+=siseOfBoard
+            index += 3;
+            compares++;
+        }//end horizontal check
+
+        
+        //verticals
+        index = 0;
+        maxCompares = 3;
+        compares = 0;
+        while (!gameOver && compares < maxCompares) {
+            if (entireGame[index].getWinner() == entireGame[index + 3].getWinner() && entireGame[index].getWinner() == entireGame[index + 6].getWinner()) {
+                completed = true;
+                if (entireGame[index].getWinner() == 'x') {
+                    boardWinner = 1;
+                }
+                else {
+                    boardWinner = 2;
+                }
+            }
+            //next column
+            index += 1;
+            compares++;
+        }//end vertical check
+
+        //diagonals are not related so 2 if statements will do.
+        //could be used in a larger board with [0],[counter*(sizeOfBoard+1)]
+        if (entireGame[0].getWinner() == entireGame[4].getWinner() && entireGame[0].getWinner() == entireGame[8].getWinner()) {
+            completed = true;
+            if (entireGame[0].getWinner() == 'x') {
+                boardWinner = 1;
+            }
+            else {
+                boardWinner = 2;
+            }
+        }
+        if (entireGame[2].getWinner() == entireGame[4].getWinner() && entireGame[0].getWinner() == entireGame[6].getWinner()) {
+            completed = true;
+            if (entireGame[2].getWinner() == 'x') {
+                boardWinner = 1;
+            }
+            else {
+                boardWinner = 2;
+            }
+        }
+        return completed;
+    }
+
 void GameBoard :: displayGameBoard(int boardToDisplay) {
     int currentCursorX = 0;
     int currentCursorY = 0;
@@ -271,6 +346,7 @@ class logic{
 private:
     GameBoard game;
     int currentBoardNum = 4;
+    int turn = 2;
 public:
     //start a new game. This function is called when the game is first opened
     void gameOpened(){
@@ -313,6 +389,10 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
+                    if(turn = 1)
+                                turn = 2;
+                            else
+                                turn = 1;
                     menuForPlayingGame(game);
                 }
                 break;
@@ -325,6 +405,10 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
+                    if(turn = 1)
+                                turn = 2;
+                            else
+                                turn = 1;
                     menuForPlayingGame(game);
                 }
                 break;
@@ -337,6 +421,10 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
+                    if(turn = 1)
+                                turn = 2;
+                            else
+                                turn = 1;
                     menuForPlayingGame(game);
                 }
                 break;
@@ -349,6 +437,10 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
+                    if(turn = 1)
+                                turn = 2;
+                            else
+                                turn = 1;
                     menuForPlayingGame(game);
                 }
                 break;
@@ -361,6 +453,10 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
+                    if(turn = 1)
+                                turn = 2;
+                            else
+                                turn = 1;
                     menuForPlayingGame(game);
                 }
                 break;
@@ -373,6 +469,10 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
+                    if(turn = 1)
+                                turn = 2;
+                            else
+                                turn = 1;
                     menuForPlayingGame(game);
                 }
                 break;
@@ -385,6 +485,10 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
+                    if(turn = 1)
+                                turn = 2;
+                            else
+                                turn = 1;
                     menuForPlayingGame(game);
                 }
                 break;
@@ -397,6 +501,10 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
+                    if(turn = 1)
+                                turn = 2;
+                            else
+                                turn = 1;
                     menuForPlayingGame(game);
                 }
                 break;
@@ -409,6 +517,10 @@ public:
                 else
                 {
                     game.setCurrentBoard(input-1);
+                    if(turn = 1)
+                                turn = 2;
+                            else
+                                turn = 1;
                     menuForPlayingGame(game);
                 }
                 break;
@@ -424,6 +536,10 @@ public:
          */
         game.displayGameBoard(currentBoardNum);
         refresh();
+        if(checkGameOver)
+        {
+            //end game
+        }
         
         char inputChar = 'M';
         int input = -1;
@@ -467,6 +583,10 @@ public:
                         {
                             game.setCurrentBoard(input-1);
                             currentBoardNum = input-1;
+                            if(turn = 1)
+                                turn = 2;
+                            else
+                                turn = 1;
                             menuForPlayingGame(game);
                         }
                     }
@@ -481,6 +601,10 @@ public:
                         {
                             game.setCurrentBoard(input-1);
                             currentBoardNum = input-1;
+                            if(turn = 1)
+                                turn = 2;
+                            else
+                                turn = 1;
                             menuForPlayingGame(game);
                         }
                     }
