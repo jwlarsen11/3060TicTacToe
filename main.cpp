@@ -204,7 +204,7 @@ GameBoard :: GameBoard() {
         //****************************
         //for testing purposes should be removed upon logic completion
         //******************************
-        entireGame[i]->fill();
+       // entireGame[i]->fill();
         
     }
     //start in the middle
@@ -223,16 +223,16 @@ void GameBoard :: displayGameBoard(int boardToDisplay) {
             move(currentCursorY, currentCursorX);
             //logic will be if the board number is the current board being played display everything else just display a x and o.
             if(currentBoard == boardToDisplay)
-                entireGame[k]->displayBoard(currentCursorY,currentCursorX,true);
+                entireGame[currentBoard]->displayBoard(currentCursorY,currentCursorX,true);
             else
-                entireGame[k]->displayBoard(currentCursorY,currentCursorX,false);
+                entireGame[currentBoard]->displayBoard(currentCursorY,currentCursorX,false);
             //set cursor to right of it
             currentCursorX += 7;
             currentBoard++;
         }
         //set cursor to the needed recent column and reset x to the left hand side
-        currentCursorY +=4;
         currentCursorX = 0;
+        currentCursorY +=4;
     }
 }
 char GameBoard :: getElementInOneSquare(TicTacBoard& square,int index){
@@ -270,6 +270,7 @@ GameBoard& GameBoard::operator=(const GameBoard& other) {
 class logic{
 private:
     GameBoard game;
+    int currentBoardNum = 4;
 public:
     //start a new game. This function is called when the game is first opened
     void gameOpened(){
@@ -295,92 +296,121 @@ public:
         
     }
 
-    int ifBoardAlreadyWon(GameBoard& game)
+    void ifBoardAlreadyWon(GameBoard& game)
     {
-        printw("Associated Board has been completed! Where would you like to go?");
-        char input = getch();
+        refresh();
+        printw("Associated Board has been completed! Where would you like to go?\n");
+        char inputChar = getch();
+        int input = inputChar - '0';
         switch(input)
         {
-            case '1':
+            case 1:
                 if(game.getOneTicTacBoard(0).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
+                {
                     game.setCurrentBoard(input-1);
+                    menuForPlayingGame(game);
+                }
                 break;
-            case '2':
+            case 2:
                 if(game.getOneTicTacBoard(1).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
+                {
                     game.setCurrentBoard(input-1);
+                    menuForPlayingGame(game);
+                }
                 break;
-            case '3':
+            case 3:
                 if(game.getOneTicTacBoard(2).checkWin()== true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
+                {
                     game.setCurrentBoard(input-1);
+                    menuForPlayingGame(game);
+                }
                 break;
-            case '4':
+            case 4:
                 if(game.getOneTicTacBoard(3).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
+                {
                     game.setCurrentBoard(input-1);
+                    menuForPlayingGame(game);
+                }
                 break;
-            case '5':
+            case 5:
                 if(game.getOneTicTacBoard(4).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
+                {
                     game.setCurrentBoard(input-1);
+                    menuForPlayingGame(game);
+                }
                 break;
-            case '6':
+            case 6:
                 if(game.getOneTicTacBoard(5).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
+                {
                     game.setCurrentBoard(input-1);
+                    menuForPlayingGame(game);
+                }
                 break;
-            case '7':
+            case 7:
                 if(game.getOneTicTacBoard(6).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
+                {
                     game.setCurrentBoard(input-1);
+                    menuForPlayingGame(game);
+                }
                 break;
-            case '8':
+            case 8:
                 if(game.getOneTicTacBoard(7).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
+                {
                     game.setCurrentBoard(input-1);
+                    menuForPlayingGame(game);
+                }
                 break;
-            case '9':
+            case 9:
                 if(game.getOneTicTacBoard(8).checkWin() == true)
                 {
                     printw("Board Already Completed! Please try again!");
                     ifBoardAlreadyWon(game);
                 }
                 else
+                {
                     game.setCurrentBoard(input-1);
+                    menuForPlayingGame(game);
+                }
                 break;
             default:
                 printw("Input not recognized! Try Again!");
@@ -392,42 +422,43 @@ public:
     char menuForPlayingGame(GameBoard& game){
         /*this function will take input and detect what is pressed. If a number is pressed it needs to check (or call function) that sees in the number pressed is a valid board space. Display should be the spots availiable in the current square, save, load, quit.
          */
+        game.displayGameBoard(currentBoardNum);
+        refresh();
         
-        char input;
-        
+        char inputChar = 'M';
+        int input = -1;
         move(15, 0);
         printw("Choose Save(S/s)\nQuit(Q/q)\nOr one of the following squares(1-9): ");
         for (int i = 0; i < 9; i++)
         {
-            if (game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(i) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(i) != 'o')
+            if (game.getOneTicTacBoard(currentBoardNum).getElement(i) != 'x' && game.getOneTicTacBoard(currentBoardNum).getElement(i) != 'o')
             {
                 printw("%d ",i+1);
                 
             }
         }
         printw("\n");
-        input = getch();
-        
-        input = toupper(input);
-        
-        if(input == 'S')
+        inputChar = getch();
+        input = inputChar - '0';
+        inputChar = toupper(inputChar);
+        if(inputChar == 'S')
         {
             printw("S was entered");
             saveGame(game);
-            break;
+            menuForPlayingGame(game);
         }
-        else if(input == 'Q')
+        else if(inputChar == 'Q')
         {
             printw("Q was entered");
-            break;
+            
         }
-        else if(input == '1' || input == '2' || input == '3' || input == '4' || input == '5' || input == '6' || input == '7' || input == '8' || input == '9')
+        else if(inputChar == '1' || inputChar == '2' || inputChar == '3' || inputChar == '4' || inputChar == '5' || inputChar == '6' || inputChar == '7' || inputChar == '8' || inputChar == '9')
         {
-            if(game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'x' && game.getOneTicTacBoard(game.getCurrentBoardNumber()).getElement(input-1) != 'o')
+            if(game.getOneTicTacBoard(currentBoardNum).getElement(input-1) != 'x' && game.getOneTicTacBoard(currentBoardNum).getElement(input-1) != 'o')
                 {
                     if(game.getTurn() == 1)
                     {
-                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        game.setElementInOneSquare(currentBoardNum, input-1, 'x');
                         if(game.getOneTicTacBoard(input-1).checkWin())
                         {
                             ifBoardAlreadyWon(game);
@@ -435,11 +466,13 @@ public:
                         else
                         {
                             game.setCurrentBoard(input-1);
+                            currentBoardNum = input-1;
+                            menuForPlayingGame(game);
                         }
                     }
                     else
                     {
-                        game.getOneTicTacBoard(game.getCurrentBoardNumber()).setElement(input-1, 'x');
+                        game.getOneTicTacBoard(currentBoardNum).setElement(input-1, 'o');
                         if(game.getOneTicTacBoard(input-1).checkWin())
                         {
                             ifBoardAlreadyWon(game);
@@ -447,6 +480,8 @@ public:
                         else
                         {
                             game.setCurrentBoard(input-1);
+                            currentBoardNum = input-1;
+                            menuForPlayingGame(game);
                         }
                     }
                 }
@@ -458,10 +493,9 @@ public:
         }
         else
         {
-            printw("Input not regonized. Please enter 1 or 2.\nEnter any key to continue.");
-            getch();
+            printw("Input not regonized. Try again!\n");
             clear();
-            break;     
+            menuForPlayingGame(game);
         }
         return input;
     }
@@ -606,9 +640,7 @@ int main() {
     
     GameBoard test;
     logic bigBrain;
-    
     bigBrain.gameOpened();
-    
     
     printw("\n\nThanks for playing! Press any key to quit.");
     refresh();
