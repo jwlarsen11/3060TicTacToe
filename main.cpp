@@ -531,14 +531,15 @@ public:
         }
     }
     
-    char menuForPlayingGame(GameBoard& game){
+    int menuForPlayingGame(GameBoard& game){
         /*this function will take input and detect what is pressed. If a number is pressed it needs to check (or call function) that sees in the number pressed is a valid board space. Display should be the spots availiable in the current square, save, load, quit.
          */
         game.displayGameBoard(currentBoardNum);
         refresh();
         if(checkGameOver)
         {
-            //end game
+            printw("Player " + turn.toString() + " wins!");
+            return turn;
         }
         
         char inputChar = 'M';
