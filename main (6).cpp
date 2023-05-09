@@ -803,8 +803,6 @@ public:
     }
     
     int menuForPlayingGame(GameBoard& game){
-        /*this function will take input and detect what is pressed. If a number is pressed it needs to check (or call function) that sees in the number pressed is a valid board space. Display should be the spots availiable in the current square, save, load, quit.
-         */
         disp.drawBoard(&game);
         refresh();
         
@@ -833,25 +831,33 @@ public:
             }
         }
         printw("\n");
+        if(turn ==1){
+            printw("Current turn is 'X'");
+        }
+        else{
+            printw("Current turn is 'O'");
+        }
+        printw("\n");
         inputChar = getch();
         input = inputChar - '0';
         inputChar = toupper(inputChar);
+        
         if(inputChar == 'S')
         {
-            printw("S was entered");
+            printw("Saving game");
             saveGame(game);
             menuForPlayingGame(game);
         }
         else if(inputChar == 'Q')
         {
-            printw("Q was entered");
+            printw("Quitting game");
             
         }
         else if(inputChar == '1' || inputChar == '2' || inputChar == '3' || inputChar == '4' || inputChar == '5' || inputChar == '6' || inputChar == '7' || inputChar == '8' || inputChar == '9')
         {
             if(game.getOneTicTacBoard(currentBoardNum).getElement(input-1) != 'x' && game.getOneTicTacBoard(currentBoardNum).getElement(input-1) != 'o')
                 {
-                    if(game.getTurn() == 1)
+                    if(turn == 1)
                     {
                         game.setElementInOneSquare(currentBoardNum, input-1, 'x');
                         if(game.getOneTicTacBoard(input-1).checkWin())
@@ -871,7 +877,7 @@ public:
                     }
                     else
                     {
-                        game.getOneTicTacBoard(currentBoardNum).setElement(input-1, 'o');
+                        game.setElementInOneSquare(currentBoardNum, input-1, 'o');
                         if(game.getOneTicTacBoard(input-1).checkWin())
                         {
                             ifBoardAlreadyWon(game);
@@ -904,7 +910,7 @@ public:
     }
     
     
-    //method that saves a game to a file
+   //method that saves a game to a file
     void saveGame(GameBoard& game){
         //code taken/inspired from code for geeks link in announcement on canvas.
         // Object to write in file
@@ -914,9 +920,9 @@ public:
         file_obj.open("saveFile.txt", ios::out);
         
         //save the variables
-        file_obj << game.getCurrentBoardNumber();
+        file_obj << currentBoardNum;
         file_obj << game.getBoardWinner();
-        file_obj << game.getTurn();
+        file_obj << turn;
         
         TicTacBoard toChange;
         
@@ -958,7 +964,7 @@ public:
                 file_obj >> input;
                 intToChange = input - '0'; //this line could be moved into the method call but clarity ya know
                 game.setCurrentBoard(intToChange);
-                
+                currentBoardNum = intToChange;
                 //board winner
                 file_obj >> input;
                 intToChange = input - '0'; //this line could be moved into the method call but clarity ya know
@@ -968,6 +974,7 @@ public:
                 file_obj >> input;
                 intToChange = input - '0'; //this line could be moved into the method call but clarity ya know
                 game.setTurn(intToChange);
+                turn = intToChange;
                 
                 //now for the arrays
                 for(int outer = 0;outer<9;outer++){
@@ -988,48 +995,6 @@ public:
             refresh();
             return false;
         }
-    }
-    
-    int menuGameOpened(){
-        bool verified = false;
-        //loop until valid choice
-        while(!verified){
-            printw("Quit program or play game?\n1.Play Game\n2.Quit Game\n3. Load Game\n");
-            char input;
-            input = getch();
-            
-            switch(input){
-                case '1':
-                    verified = true; //not needed because return exits function calls but clarity ya know
-                    clear(); //clear the screen to display something new
-                    return 1;
-                    break;
-                    
-                case '2':
-                    verified = true;
-                    clear();
-                    return 2;
-                    break;
-                case '3':
-                    
-                    if(loadGame(game)){
-                        verified = true;
-                        clear();
-                        return 3;
-                    }
-                    clear();
-                    break;
-                default:
-                    printw("Input not regonized. Please enter 1 or 2.\nEnter any key to continue.");
-                    getch();
-                    clear();
-                    break;
-                    
-            }//end switch
-            //need this refresh to print anyway
-        }
-        refresh();
-        return -1;
     }
 };
 
