@@ -30,9 +30,6 @@ public:
     TicTacBoard getOneTicTacBoard(int index);
     bool checkGameOver();
     
-    GameBoard& operator=(const GameBoard& other);
-    
-    
     //getter and setters
     int getCurrentBoardNumber(){
         return currentBoard;
@@ -89,16 +86,19 @@ public:
         return winner;
     }
     
+    //display the current board
     void displayBoard(int currentCursorY,int currentCursorX, bool displayAll) {
         int count = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
                 if (j == 0)
                     printw(" |");
+                //if we want to display numbers and the x/o bool will be true
                 else if(displayAll){
                     printw("%c|", avaiableSquares[count]);
                     count++;
                 }
+                //else just display x/o
                 else if(!isdigit(avaiableSquares[count])){
                     printw("%c|", avaiableSquares[count]);
                     count++;
@@ -117,6 +117,7 @@ public:
         refresh();
     }
 
+    //check the tic tac board for a win
     bool checkWin()
     {
         bool completed = false;
@@ -187,7 +188,7 @@ public:
     }
     
     //****************************
-    //for testing purposes should be removed upon logic completion
+    //for testing purposes should be not called upon logic completion
     //******************************
     void fill(){
         for (int i = 0; i < 9; i++) {
@@ -207,9 +208,6 @@ GameBoard :: GameBoard() {
     
     for (int i = 0; i < 9; i++) {
         entireGame[i] = new TicTacBoard();
-        //****************************
-        //for testing purposes should be removed upon logic completion
-        //******************************
        // entireGame[i]->fill();
         
     }
@@ -219,6 +217,8 @@ GameBoard :: GameBoard() {
     boardWinner = false;
 }
 
+//check if the board has a win
+//this function is not working due to the remote testing we had to do.
 bool GameBoard :: checkGameOver()
     {
         bool completed = false;
@@ -289,7 +289,9 @@ bool GameBoard :: checkGameOver()
         return completed;
     }
 
+//display a board
 void GameBoard :: displayGameBoard(int boardToDisplay) {
+    //start in the top of the window
     int currentCursorX = 0;
     int currentCursorY = 0;
     
@@ -311,6 +313,7 @@ void GameBoard :: displayGameBoard(int boardToDisplay) {
         currentCursorY +=4;
     }
 }
+//getters and setters
 char GameBoard :: getElementInOneSquare(TicTacBoard& square,int index){
     return  square.getElement(index);
 }
@@ -323,25 +326,6 @@ TicTacBoard GameBoard :: getOneTicTacBoard(int index){
     return *entireGame[index];
 }
 
-/*
-//this overloads the '=' operator. Made for the load function (potentially)
-GameBoard& GameBoard::operator=(const GameBoard& other) {
-    //see if they already equal each other
-    if (this != &other) {
-        //set the tic tac board arrays equal to each other
-        for(int outer =0; outer<9;outer++){
-            for(int index =0; index<9;index++){
-                entireGame[outer]->setElement(index, other.entireGame[outer]->getElement(index));
-            }
-        }
-        currentBoard = other.currentBoard;
-        currentTurn = other.currentTurn;
-        boardWinner = other.boardWinner;
-    }
-    return *this;
-}
-*/
-
 //logic for the game
 class logic{
 private:
@@ -351,6 +335,7 @@ private:
 public:
     //start a new game. This function is called when the game is first opened
     void gameOpened(){
+        //grapb the input from the user. 1 = new game, 2 = quit (else return block), 3 = load game from file
         int selection = menuGameOpened();
         if(selection == 1){
             playGame(game);
@@ -366,20 +351,26 @@ public:
         
     }
     
+    //recusivly call the menuForPlayingGame until we finally return a series of voids.
     void playGame(GameBoard& game){
+        //display to start game.
         game.displayGameBoard(game.getCurrentBoardNumber());
         
         menuForPlayingGame(game);
-        
     }
 
+    //check to see if a board has been one
     void ifBoardAlreadyWon(GameBoard& game)
     {
         refresh();
         printw("Associated Board has been completed! Where would you like to go?\n");
         char inputChar = getch();
+        //convert input to integer
         int input = inputChar - '0';
         switch(input)
+        //after each input check that board for a win. Recursivly call this function until a valid input is entered then set the next board to play
+            //if the display is valid call the menuForPlayingGame
+            //this comment applies to all case statements.
         {
             case 1:
                 if(game.getOneTicTacBoard(0).checkWin() == true)
@@ -525,6 +516,7 @@ public:
                     menuForPlayingGame(game);
                 }
                 break;
+                //bad input so ask for it again
             default:
                 printw("Input not recognized! Try Again!");
                 ifBoardAlreadyWon(game);
@@ -532,10 +524,13 @@ public:
         }
     }
     
+    //this is the menu that will be used during play time
     int menuForPlayingGame(GameBoard& game){
+        //display the current board
         game.displayGameBoard(currentBoardNum);
         refresh();
         
+        //see if the game has been won
         if(!game.checkGameOver())
         {
             if (turn == 1){
@@ -551,6 +546,7 @@ public:
         char inputChar = 'M';
         int input = -1;
         move(15, 0);
+        //display the availiable options ot play the game.
         printw("Choose Save(S/s)\nQuit(Q/q)\nOr one of the following squares(1-9): ");
         for (int i = 0; i < 9; i++)
         {
@@ -561,6 +557,7 @@ public:
             }
         }
         printw("\n");
+        //tell the user who's turn it is
         if(turn ==1){
             printw("Current turn is 'X'");
         }
@@ -568,21 +565,29 @@ public:
             printw("Current turn is 'O'");
         }
         printw("\n");
+        //grab new input and convert it to a char
         inputChar = getch();
         input = inputChar - '0';
         inputChar = toupper(inputChar);
         
+        //if s save game
         if(inputChar == 'S')
         {
-            printw("Saving game");
+            printw("Saved game");
             saveGame(game);
             menuForPlayingGame(game);
         }
+        //if Q quit game
         else if(inputChar == 'Q')
         {
             printw("Quitting game");
             
         }
+        //if its 1-9 run the game logic which is as follows:
+        //if the square you want is not an x or o place an x/o on that square and update the voard to play to corrospond to the input chosen.
+        //if the board to play is already won call the ifBoardAlreadyWon function.
+        //if its not update the board to play and change turn.
+        //the above logic is the same for x/o placement
         else if(inputChar == '1' || inputChar == '2' || inputChar == '3' || inputChar == '4' || inputChar == '5' || inputChar == '6' || inputChar == '7' || inputChar == '8' || inputChar == '9')
         {
             if(game.getOneTicTacBoard(currentBoardNum).getElement(input-1) != 'x' && game.getOneTicTacBoard(currentBoardNum).getElement(input-1) != 'o')
@@ -718,6 +723,7 @@ public:
                 return true;
             }
         }
+        //if no file is found prompt for another input
         catch(int error){
             printw("A save file could not be found please choose another option. Press any key to continue");
             getch();
@@ -727,14 +733,16 @@ public:
         }
     }
     
+    //this is the menu for when a game is opened right away
     int menuGameOpened(){
         bool verified = false;
         //loop until valid choice
         while(!verified){
-            printw("Quit program or play game?\n1.Play Game\n2.Quit Game\n3. Load Game\n");
+            printw("Quit program, play game, or save game?\n1.Play Game\n2.Quit Game\n3. Load Game\n");
             char input;
             input = getch();
             
+            //these switches corrospond to the input chosen.
             switch(input){
                 case '1':
                     verified = true; //not needed because return exits function calls but clarity ya know
@@ -748,7 +756,6 @@ public:
                     return 2;
                     break;
                 case '3':
-                    
                     if(loadGame(game)){
                         verified = true;
                         clear();
@@ -778,7 +785,6 @@ int main() {
     keypad(stdscr, TRUE);        /* We get F1, F2 etc..        */
     noecho();            /* Don't echo() while we do getch */
     
-    GameBoard test;
     logic bigBrain;
     bigBrain.gameOpened();
     
