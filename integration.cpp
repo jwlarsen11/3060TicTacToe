@@ -13,6 +13,8 @@ using namespace std;
 //declaring classes here so they can be used in classes prior to actual declaration
 class TicTacBoard;
 class GameBoard;
+class logic;
+class Display;
 
 class GameBoard{
 private:
@@ -27,7 +29,6 @@ public:
     //defined later because we need TicTacBoard methods which aren't defined at this point in the program.
     GameBoard();
     int currentTurn; //player 1 or 2
-    void displayGameBoard(int);
     char getElementInOneSquare(TicTacBoard& square, int index);
     void setElementInOneSquare(int boardIndex, int squareindex,char newElement);
     TicTacBoard getOneTicTacBoard(int index);
@@ -304,318 +305,13 @@ TicTacBoard GameBoard :: getOneTicTacBoard(int index){
     return *entireGame[index];
 }
 
-//Class that handles all of the display needs of the Gameboard and therefore needs to inherit properties of the Gameboard
-class Display: protected GameBoard{
-  private:
-  int XMAX = 72;
-  int YMAX = 36;
-  char fixchax[18] = {1,1,0,0,1,1,
-                    0,0,1,1,0,0,
-                    1,1,0,0,1,1
-                    };
 
-  char fixchao[18] = {0,1,1,1,1,0,
-                    1,1,0,0,1,1,
-                    0,1,1,1,1,0
-                   };
-  char beegx[160] = {1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
-                  1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
-                  0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,
-                  0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
-                  0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
-                  0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
-                  0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
-                  0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,
-                  1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
-                  1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1
-                  };
-
-  char beego[160] = {0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,
-                  0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
-                  0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-                  1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,
-                  1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,
-                  1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,
-                  1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,
-                  0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-                  0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
-                  0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0
-                  };
-  public:
-    void drawGrid(GameBoard *board, int color, int grid)      // Draw grid for the gameboard
-  {
-      int i, j;
-      attron(COLOR_PAIR(color));
-      for(i=0; i<=YMAX; i++)
-          for(j=0; j<=XMAX; j++)
-          {
-              if (i == 0)   // Firs row of the gameboard.
-              {
-                  if (j == 0)              // Upper-Left corner.
-                      mvaddch(board->y+i, board->x+j, ACS_ULCORNER);
-                 else if (j == XMAX)     // Upper-Right corner.
-                     mvaddch(board->y+i, board->x+j, ACS_URCORNER);
-                 else if (j % (XMAX / grid) == 0)   // Middle column.
-                      mvaddch(board->y+i, board->x+j, ACS_TTEE);
-                 else                    // Normal lines.
-                      mvaddch(board->y+i, board->x+j, ACS_HLINE);
-              }
-            
-              else if (i % (YMAX / grid) == 0 && i != YMAX)   // Dividers.
-              {
-                if (j == 0)             // First column.
-                    mvaddch(board->y+i, board->x+j, ACS_LTEE);
-                else if (j == XMAX)     // Last column.
-                    mvaddch(board->y+i, board->x+j, ACS_RTEE);
-                else if (j % (XMAX / grid) == 0)   // Middle column.
-                    mvaddch(board->y+i, board->x+j, ACS_PLUS);
-                else                    // Normal lines.
-                    mvaddch(board->y+i, board->x+j, ACS_HLINE);
-              }
-            
-              else if (i == YMAX)             // Last row
-              {
-                if (j == 0)              // Lower-Left corner.
-                    mvaddch(board->y+i, board->x+j, ACS_LLCORNER);
-                else if (j == XMAX)     // Lower-Right corner.
-                    mvaddch(board->y+i, board->x+j, ACS_LRCORNER);
-                else if (j % (XMAX / grid) == 0)   // Middle column.
-                    mvaddch(board->y+i, board->x+j, ACS_BTEE);
-                else                    // Normal lines.
-                    mvaddch(board->y+i, board->x+j, ACS_HLINE);
-              }
-            
-              else if (j % (XMAX / grid) == 0)   // Middle lines.
-              {
-                mvaddch(board->y+i, board->x+j, ACS_VLINE);
-              }
-        }
-    attroff(COLOR_PAIR(color));
-  }//drawGrid
-
-  //Drawing the chips
-  void drawChips(int *dest, char chip, GameBoard *board)
-  {
-    int i, j;
-    int y, x;
-    
-    for (i=0; i<3; i++)     // Chip height
-        for (j=0; j<6; j++)     // Chip width
-        {
-            y = YMAX/9 * dest[0] + i + board->y + 1;
-            x = XMAX/9 * dest[1] + j + board->x + 2;
-            if (fixchax[j+6*i] == 1 && chip == 'x')          // If X chip...
-            {
-                attron(COLOR_PAIR(4));
-                mvaddch(y, x, '#');
-                attroff(COLOR_PAIR(4));
-            }
-            
-            else if (fixchao[j+6*i] == 1 && chip == 'o')     // If O chip...
-            {
-                attron(COLOR_PAIR(3));
-                mvaddch(y, x, '#');
-                attroff(COLOR_PAIR(3));
-            }
-            
-            else    // Print spaces.
-            {
-                //
-            }
-        }
-  }//drawChips
-
-  void drawBeegChips(int *dest, char chip, GameBoard *board){
-    int i, j;
-    int y, x;
-    
-    for (i=0; i<10; i++)     // Chip height
-        for (j=0; j<16; j++)     // Chip width
-        {
-            y = YMAX/3 * dest[0] + i + board->y + 2;
-            x = XMAX/3 * dest[1] + j + board->x + 5;
-            if (fixchax[j+16*i] == 1 && chip == 'x')          // If X chip...
-            {
-                attron(COLOR_PAIR(4));
-                mvaddch(y, x, '#');
-                attroff(COLOR_PAIR(4));
-            }
-            
-            else if (fixchao[j+16*i] == 1 && chip == 'o')     // If O chip...
-            {
-                attron(COLOR_PAIR(3));
-                mvaddch(y, x, '#');
-                attroff(COLOR_PAIR(3));
-            }
-            
-            else    // Print spaces.
-            {
-                //
-            }
-        }
-  }//drawBeegChips
-
-  void drawBoard(GameBoard *board){
-    init_pair(1, COLOR_CYAN, COLOR_BLACK); //3x3 color
-    init_pair(2, COLOR_WHITE,COLOR_BLACK); // 9x9 color
-    init_pair(3, COLOR_YELLOW,COLOR_BLACK);// o color
-    init_pair(4, COLOR_GREEN,COLOR_BLACK);//x color
-
-    //drawing the grid
-    drawGrid(board,2,9);
-    drawGrid(board,1,3);
-  } //drawBoard
-
-//converts the information from the boards to be used in the display properly
-void convertToCoordsBeeg(int boardNum, int *coord){
-  switch(boardNum){
-    case 0:
-    coord[0] = 0;
-    coord[1] = 0;
-    break;
-    case 1:
-    coord[0] = 0;
-    coord[1] = 1;
-    break;
-    case 2:
-    coord[0] = 0;
-    coord[1] = 2;
-    break;
-    case 3:
-    coord[0] = 1;
-    coord[1] = 0;
-    break;
-    case 4:
-    coord[0] = 1;
-    coord[1] = 1;
-    break;
-    case 5:
-    coord[0] = 1;
-    coord[1] = 2;
-    break;
-    case 6:
-    coord[0] = 2;
-    coord[1] = 0;
-    break;
-    case 7:
-    coord[0] = 2;
-    coord[1] = 1;
-    break;
-    case 8:
-    coord[0] = 2;
-    coord[1] = 2;
-    break;
-  }
-}//convertToCoordsBeeg
-
-void startLittle(int boardNum, int *coord){
-  switch(boardNum){
-    case 0:
-    coord[0] = 0;
-    coord[1] = 0;
-    break;
-    case 1:
-    coord[0] = 0;
-    coord[1] = 3;
-    break;
-    case 2:
-    coord[0] = 0;
-    coord[1] = 6;
-    break;
-    case 3:
-    coord[0] = 3;
-    coord[1] = 0;
-    break;
-    case 4:
-    coord[0] = 3;
-    coord[1] = 3;
-    break;
-    case 5:
-    coord[0] = 3;
-    coord[1] = 6;
-    break;
-    case 6:
-    coord[0] = 6;
-    coord[1] = 0;
-    break;
-    case 7:
-    coord[0] = 6;
-    coord[1] = 3;
-    break;
-    case 8:
-    coord[0] = 6;
-    coord[1] = 6;
-    break;
-  }
-}//startLittle
-
-  void addLittle(int *coord, int place){
-    switch(place){
-      case 0:
-      break;
-      case 1:
-      coord[1] += 1;
-      break;
-      case 2:
-      coord[1] += 2;
-      break;
-      case 3:
-      coord[0] += 1;
-      break;
-      case 4:
-      coord[0] += 1;
-      coord[1] += 1;
-      break;
-      case 5:
-      coord[0] += 1;
-      coord[1] += 2;
-      break;
-      case 6:
-      coord[0] += 2;
-      break;
-      case 7:
-      coord[0] += 2;
-      coord[1] += 1;
-      break;
-      case 8:
-      coord[0] += 2;
-      coord[1] += 2;
-      break;
-    }
-  }//addLittle
-
-int convertLittle(int *coord,int boardNum, int place){
-  startLittle(boardNum, coord);
-  addLittle(coord, place);
-  return 0;
-}//convertLittle
-
-};//Display Class
-
-/*
-//this overloads the '=' operator. Made for the load function (potentially)
-GameBoard& GameBoard::operator=(const GameBoard& other) {
-    //see if they already equal each other
-    if (this != &other) {
-        //set the tic tac board arrays equal to each other
-        for(int outer =0; outer<9;outer++){
-            for(int index =0; index<9;index++){
-                entireGame[outer]->setElement(index, other.entireGame[outer]->getElement(index));
-            }
-        }
-        currentBoard = other.currentBoard;
-        currentTurn = other.currentTurn;
-        boardWinner = other.boardWinner;
-    }
-    return *this;
-}
-*/
 
 //logic for the game
 class logic{
-private:
+protected:
     GameBoard game;
-    Display disp;
+    Display* disp;
     int currentBoardNum = 4;
     int turn = 2;
 public:
@@ -623,11 +319,11 @@ public:
     void gameOpened(){
         int selection = menuGameOpened();
         if(selection == 1){
-            playGame(game, disp);
+            playGame(game, *disp);
         }
         else if (selection == 3){
             loadGame(game);
-            playGame(game,disp);
+            playGame(game,*disp);
             
         }
         else{
@@ -636,12 +332,7 @@ public:
         
     }
     
-    void playGame(GameBoard& game, Display& disp){
-        disp.drawBoard(&game);
-        
-        menuForPlayingGame(game);
-        
-    }
+    void playGame(GameBoard& game, Display& disp);
 
     void ifBoardAlreadyWon(GameBoard& game)
     {
@@ -802,112 +493,7 @@ public:
         }
     }
     
-    int menuForPlayingGame(GameBoard& game){
-        disp.drawBoard(&game);
-        refresh();
-        
-        if(!game.checkGameOver())
-        {
-            if (turn == 1){
-                printw("Player 1 wins!");
-            }
-            else if(turn ==2){
-                printw("Player 2 wins!");
-                
-            }
-            return turn;
-        }
-        
-        char inputChar = 'M';
-        int input = -1;
-        move(85, 100);
-        printw("Choose Save(S/s)\nQuit(Q/q)\nOr one of the following squares(1-9): ");
-        for (int i = 0; i < 9; i++)
-        {
-            if (game.getOneTicTacBoard(currentBoardNum).getElement(i) != 'x' && game.getOneTicTacBoard(currentBoardNum).getElement(i) != 'o')
-            {
-                printw("%d ",i+1);
-                
-            }
-        }
-        printw("\n");
-        if(turn ==1){
-            printw("Current turn is 'X'");
-        }
-        else{
-            printw("Current turn is 'O'");
-        }
-        printw("\n");
-        inputChar = getch();
-        input = inputChar - '0';
-        inputChar = toupper(inputChar);
-        
-        if(inputChar == 'S')
-        {
-            printw("Saving game");
-            saveGame(game);
-            menuForPlayingGame(game);
-        }
-        else if(inputChar == 'Q')
-        {
-            printw("Quitting game");
-            
-        }
-        else if(inputChar == '1' || inputChar == '2' || inputChar == '3' || inputChar == '4' || inputChar == '5' || inputChar == '6' || inputChar == '7' || inputChar == '8' || inputChar == '9')
-        {
-            if(game.getOneTicTacBoard(currentBoardNum).getElement(input-1) != 'x' && game.getOneTicTacBoard(currentBoardNum).getElement(input-1) != 'o')
-                {
-                    if(turn == 1)
-                    {
-                        game.setElementInOneSquare(currentBoardNum, input-1, 'x');
-                        if(game.getOneTicTacBoard(input-1).checkWin())
-                        {
-                            ifBoardAlreadyWon(game);
-                        }
-                        else
-                        {
-                            game.setCurrentBoard(input-1);
-                            currentBoardNum = input-1;
-                            if(turn == 1)
-                                turn = 2;
-                            else
-                                turn = 1;
-                            menuForPlayingGame(game);
-                        }
-                    }
-                    else
-                    {
-                        game.setElementInOneSquare(currentBoardNum, input-1, 'o');
-                        if(game.getOneTicTacBoard(input-1).checkWin())
-                        {
-                            ifBoardAlreadyWon(game);
-                        }
-                        else
-                        {
-                            game.setCurrentBoard(input-1);
-                            currentBoardNum = input-1;
-                            if(turn == 1)
-                                turn = 2;
-                            else
-                                turn = 1;
-                            menuForPlayingGame(game);
-                        }
-                    }
-                }
-                else
-                {
-                    printw("Square Already Occupied!");
-                    menuForPlayingGame(game);
-                }
-        }
-        else
-        {
-            printw("Input not regonized. Try again!\n");
-            clear();
-            menuForPlayingGame(game);
-        }
-        return input;
-    }
+    int menuForPlayingGame(GameBoard& game);
     
     
    //method that saves a game to a file
@@ -1039,6 +625,433 @@ public:
     }
 };
 
+//Class that handles all of the display needs of the Gameboard and therefore needs to inherit properties of the Gameboard
+class Display: public logic{
+  private:
+  int XMAX = 72;
+  int YMAX = 36;
+  char fixchax[18] = {1,1,0,0,1,1,
+                    0,0,1,1,0,0,
+                    1,1,0,0,1,1
+                    };
+
+  char fixchao[18] = {0,1,1,1,1,0,
+                    1,1,0,0,1,1,
+                    0,1,1,1,1,0
+                   };
+  char beegx[160] = {1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
+                  1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
+                  0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,
+                  0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
+                  0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+                  0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+                  0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
+                  0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,
+                  1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
+                  1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1
+                  };
+
+  char beego[160] = {0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,
+                  0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
+                  0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+                  1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,
+                  1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,
+                  1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,
+                  1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,
+                  0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+                  0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
+                  0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0
+                  };
+  public:
+    void drawGrid(GameBoard *board, int color, int grid)      // Draw grid for the gameboard
+  {
+      int i, j;
+      attron(COLOR_PAIR(color));
+      for(i=0; i<=YMAX; i++)
+          for(j=0; j<=XMAX; j++)
+          {
+              if (i == 0)   // Firs row of the gameboard.
+              {
+                  if (j == 0)              // Upper-Left corner.
+                      mvaddch(board->y+i, board->x+j, ACS_ULCORNER);
+                 else if (j == XMAX)     // Upper-Right corner.
+                     mvaddch(board->y+i, board->x+j, ACS_URCORNER);
+                 else if (j % (XMAX / grid) == 0)   // Middle column.
+                      mvaddch(board->y+i, board->x+j, ACS_TTEE);
+                 else                    // Normal lines.
+                      mvaddch(board->y+i, board->x+j, ACS_HLINE);
+              }
+            
+              else if (i % (YMAX / grid) == 0 && i != YMAX)   // Dividers.
+              {
+                if (j == 0)             // First column.
+                    mvaddch(board->y+i, board->x+j, ACS_LTEE);
+                else if (j == XMAX)     // Last column.
+                    mvaddch(board->y+i, board->x+j, ACS_RTEE);
+                else if (j % (XMAX / grid) == 0)   // Middle column.
+                    mvaddch(board->y+i, board->x+j, ACS_PLUS);
+                else                    // Normal lines.
+                    mvaddch(board->y+i, board->x+j, ACS_HLINE);
+              }
+            
+              else if (i == YMAX)             // Last row
+              {
+                if (j == 0)              // Lower-Left corner.
+                    mvaddch(board->y+i, board->x+j, ACS_LLCORNER);
+                else if (j == XMAX)     // Lower-Right corner.
+                    mvaddch(board->y+i, board->x+j, ACS_LRCORNER);
+                else if (j % (XMAX / grid) == 0)   // Middle column.
+                    mvaddch(board->y+i, board->x+j, ACS_BTEE);
+                else                    // Normal lines.
+                    mvaddch(board->y+i, board->x+j, ACS_HLINE);
+              }
+            
+              else if (j % (XMAX / grid) == 0)   // Middle lines.
+              {
+                mvaddch(board->y+i, board->x+j, ACS_VLINE);
+              }
+        }
+    attroff(COLOR_PAIR(color));
+  }//drawGrid
+
+  //Drawing the chips
+  void drawChips(int *dest, char chip, GameBoard *board)
+  {
+    int i, j;
+    int y, x;
+    
+    for (i=0; i<3; i++)     // Chip height
+        for (j=0; j<6; j++)     // Chip width
+        {
+            y = YMAX/9 * dest[0] + i + board->y + 1;
+            x = XMAX/9 * dest[1] + j + board->x + 2;
+            if (fixchax[j+6*i] == 1 && chip == 'x')          // If X chip...
+            {
+                attron(COLOR_PAIR(4));
+                mvaddch(y, x, '#');
+                attroff(COLOR_PAIR(4));
+            }
+            
+            else if (fixchao[j+6*i] == 1 && chip == 'o')     // If O chip...
+            {
+                attron(COLOR_PAIR(3));
+                mvaddch(y, x, '#');
+                attroff(COLOR_PAIR(3));
+            }
+            
+            else    // Print spaces.
+            {
+                //
+            }
+        }
+  }//drawChips
+
+  void drawBeegChips(int *dest, char chip, GameBoard *board){
+    int i, j;
+    int y, x;
+    
+    for (i=0; i<10; i++)     // Chip height
+        for (j=0; j<16; j++)     // Chip width
+        {
+            y = YMAX/3 * dest[0] + i + board->y + 2;
+            x = XMAX/3 * dest[1] + j + board->x + 5;
+            if (fixchax[j+16*i] == 1 && chip == 'x')          // If X chip...
+            {
+                attron(COLOR_PAIR(4));
+                mvaddch(y, x, '#');
+                attroff(COLOR_PAIR(4));
+            }
+            
+            else if (fixchao[j+16*i] == 1 && chip == 'o')     // If O chip...
+            {
+                attron(COLOR_PAIR(3));
+                mvaddch(y, x, '#');
+                attroff(COLOR_PAIR(3));
+            }
+            
+            else    // Print spaces.
+            {
+                //
+            }
+        }
+  }//drawBeegChips
+
+  void drawBoard(GameBoard *board){
+    init_pair(1, COLOR_CYAN, COLOR_BLACK); //3x3 color
+    init_pair(2, COLOR_WHITE,COLOR_BLACK); // 9x9 color
+    init_pair(3, COLOR_YELLOW,COLOR_BLACK);// o color
+    init_pair(4, COLOR_GREEN,COLOR_BLACK);//x color
+
+    //drawing the grid
+    drawGrid(board,2,9);
+    drawGrid(board,1,3);
+    drawAllChips(game);
+  } //drawBoard
+    
+    void drawAllChips(GameBoard& game){
+        int dest[2];
+        for(int board = 0;board<9;board++){
+            TicTacBoard currentBoard = game.getOneTicTacBoard(0);
+            for(int square = 0;square<9;square++){
+                char element = currentBoard.getElement(square);
+                convertLittle(dest, board, element);
+                
+                if(element == 'x'){
+                    drawChips(dest, 'x', &game);
+                    
+                }
+                else if (element  == 'o'){
+                    drawChips(dest, 'o', &game);
+                
+                }
+                else{
+                    mvaddch(dest[1],dest[0],square);
+                    
+                    //number
+                }
+            }
+        }
+    }
+
+//converts the information from the boards to be used in the display properly
+void convertToCoordsBeeg(int boardNum, int *coord){
+  switch(boardNum){
+    case 0:
+    coord[0] = 0;
+    coord[1] = 0;
+    break;
+    case 1:
+    coord[0] = 0;
+    coord[1] = 1;
+    break;
+    case 2:
+    coord[0] = 0;
+    coord[1] = 2;
+    break;
+    case 3:
+    coord[0] = 1;
+    coord[1] = 0;
+    break;
+    case 4:
+    coord[0] = 1;
+    coord[1] = 1;
+    break;
+    case 5:
+    coord[0] = 1;
+    coord[1] = 2;
+    break;
+    case 6:
+    coord[0] = 2;
+    coord[1] = 0;
+    break;
+    case 7:
+    coord[0] = 2;
+    coord[1] = 1;
+    break;
+    case 8:
+    coord[0] = 2;
+    coord[1] = 2;
+    break;
+  }
+}//convertToCoordsBeeg
+
+void startLittle(int boardNum, int *coord){
+  switch(boardNum){
+    case 0:
+    coord[0] = 0;
+    coord[1] = 0;
+    break;
+    case 1:
+    coord[0] = 0;
+    coord[1] = 3;
+    break;
+    case 2:
+    coord[0] = 0;
+    coord[1] = 6;
+    break;
+    case 3:
+    coord[0] = 3;
+    coord[1] = 0;
+    break;
+    case 4:
+    coord[0] = 3;
+    coord[1] = 3;
+    break;
+    case 5:
+    coord[0] = 3;
+    coord[1] = 6;
+    break;
+    case 6:
+    coord[0] = 6;
+    coord[1] = 0;
+    break;
+    case 7:
+    coord[0] = 6;
+    coord[1] = 3;
+    break;
+    case 8:
+    coord[0] = 6;
+    coord[1] = 6;
+    break;
+  }
+}//startLittle
+
+  void addLittle(int *coord, int place){
+    switch(place){
+      case 0:
+      break;
+      case 1:
+      coord[1] += 1;
+      break;
+      case 2:
+      coord[1] += 2;
+      break;
+      case 3:
+      coord[0] += 1;
+      break;
+      case 4:
+      coord[0] += 1;
+      coord[1] += 1;
+      break;
+      case 5:
+      coord[0] += 1;
+      coord[1] += 2;
+      break;
+      case 6:
+      coord[0] += 2;
+      break;
+      case 7:
+      coord[0] += 2;
+      coord[1] += 1;
+      break;
+      case 8:
+      coord[0] += 2;
+      coord[1] += 2;
+      break;
+    }
+  }//addLittle
+
+int convertLittle(int *coord,int boardNum, int place){
+  startLittle(boardNum, coord);
+  addLittle(coord, place);
+  return 0;
+}//convertLittle
+
+};//Display Class
+
+void logic :: playGame(GameBoard& game, Display& disp){
+    disp.drawBoard(&game);
+    
+    menuForPlayingGame(game);
+    
+}
+
+int logic:: menuForPlayingGame(GameBoard& game){
+    disp->drawBoard(&game);
+    refresh();
+    
+    if(!game.checkGameOver())
+    {
+        if (turn == 1){
+            printw("Player 1 wins!");
+        }
+        else if(turn ==2){
+            printw("Player 2 wins!");
+            
+        }
+        return turn;
+    }
+    
+    char inputChar = 'M';
+    int input = -1;
+    move(85, 100);
+    printw("Choose Save(S/s)\nQuit(Q/q)\nOr one of the following squares(1-9): ");
+    for (int i = 0; i < 9; i++)
+    {
+        if (game.getOneTicTacBoard(currentBoardNum).getElement(i) != 'x' && game.getOneTicTacBoard(currentBoardNum).getElement(i) != 'o')
+        {
+            printw("%d ",i+1);
+            
+        }
+    }
+    printw("\n");
+    if(turn ==1){
+        printw("Current turn is 'X'");
+    }
+    else{
+        printw("Current turn is 'O'");
+    }
+    printw("\n");
+    inputChar = getch();
+    input = inputChar - '0';
+    inputChar = toupper(inputChar);
+    
+    if(inputChar == 'S')
+    {
+        printw("Saving game");
+        saveGame(game);
+        menuForPlayingGame(game);
+    }
+    else if(inputChar == 'Q')
+    {
+        printw("Quitting game");
+        
+    }
+    else if(inputChar == '1' || inputChar == '2' || inputChar == '3' || inputChar == '4' || inputChar == '5' || inputChar == '6' || inputChar == '7' || inputChar == '8' || inputChar == '9')
+    {
+        if(game.getOneTicTacBoard(currentBoardNum).getElement(input-1) != 'x' && game.getOneTicTacBoard(currentBoardNum).getElement(input-1) != 'o')
+            {
+                if(turn == 1)
+                {
+                    game.setElementInOneSquare(currentBoardNum, input-1, 'x');
+                    if(game.getOneTicTacBoard(input-1).checkWin())
+                    {
+                        ifBoardAlreadyWon(game);
+                    }
+                    else
+                    {
+                        game.setCurrentBoard(input-1);
+                        currentBoardNum = input-1;
+                        if(turn == 1)
+                            turn = 2;
+                        else
+                            turn = 1;
+                        menuForPlayingGame(game);
+                    }
+                }
+                else
+                {
+                    game.setElementInOneSquare(currentBoardNum, input-1, 'o');
+                    if(game.getOneTicTacBoard(input-1).checkWin())
+                    {
+                        ifBoardAlreadyWon(game);
+                    }
+                    else
+                    {
+                        game.setCurrentBoard(input-1);
+                        currentBoardNum = input-1;
+                        if(turn == 1)
+                            turn = 2;
+                        else
+                            turn = 1;
+                        menuForPlayingGame(game);
+                    }
+                }
+            }
+            else
+            {
+                printw("Square Already Occupied!");
+                menuForPlayingGame(game);
+            }
+    }
+    else
+    {
+        printw("Input not regonized. Try again!\n");
+        clear();
+        menuForPlayingGame(game);
+    }
+    return input;
+}
 
 int main() {
     //stuff from example program
@@ -1048,9 +1061,13 @@ int main() {
     noecho();            /* Don't echo() while we do getch */
     
     GameBoard test;
+   logic bigBrain;
     Display disp;
-    logic bigBrain;
-    bigBrain.gameOpened();
+    
+
+    
+    
+   // bigBrain.gameOpened();
     
     printw("\n\nThanks for playing! Press any key to quit.");
     refresh();
